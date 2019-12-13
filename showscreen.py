@@ -3,6 +3,8 @@ import sys
 import random
 
 import text
+import classfile
+import environment
 
 def showAuthor(screen):
     screen_size = screen.get_size()
@@ -33,7 +35,6 @@ def showAuthor(screen):
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("Exiting...")
                 sys.exit()
 
 def showIntro(screen):
@@ -61,15 +62,73 @@ def showIntro(screen):
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("Exiting...")
                 sys.exit()
 
 def showGame(screen):
+    screen_size = screen.get_size()
+    game_window = pygame.Surface(screen_size)
+    game_window = game_window.convert()
+    game_window.fill((238, 230, 133))
+    ball_color_order = ["red", "yellow", "green", "blue", "purple"]
+    num_of_color = len(ball_color_order)
+    current_ball_color = 0
+    speed_limit = 7
+    force = 0.11
+
+    ball = classfile.Ball()
+
+    # 准备阶段
+    go_start = False
     while True:
-        background = pygame.image.load('./images/background.png').convert_alpha()
-        screen.blit(background, (100, 100))
-        pygame.display.update()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                print("Exiting...")
+            if event.type == pygame.KEYUP:
+                go_start = True
+            elif event.type == pygame.QUIT:
                 sys.exit()
+        if go_start:
+            break
+        game_window.fill((238, 230, 133))
+        game_window.blit(ball.ball_surface, ball.ball_rect)
+        screen.blit(game_window, (0, 0))
+        pygame.display.update()
+
+    # 游戏部分
+    while True:
+        
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    ball.gravity -= force
+                elif event.key == pygame.K_DOWN:
+                    ball.gravity += force
+                elif event.key == pygame.K_SPACE:
+                    current_ball_color = (current_ball_color + 1) % num_of_color
+                    ball.color = ball_color_order[current_ball_color]
+                    ball.ball_surface.fill(environment.convertColor(ball.color))
+                elif event.key == pygame.K_LEFT:
+                    ball.left = -1
+                elif event.key == pygame.K_RIGHT:
+                    ball.right = 1
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    ball.left = 0
+                elif event.key == pygame.K_RIGHT:
+                    ball.right = 0
+                elif event.key == pygame.K_UP:
+                    ball.gravity += force
+                elif event.key == pygame.K_DOWN:
+                    ball.gravity -= force
+            elif event.type == pygame.QUIT:
+                sys.exit()
+        ball.speed += ball.gravity
+        if ball.speed >= speed_limit:
+            ball.speed = speed_limit
+        elif ball.speed <= -speed_limit:
+            ball.speed = -speed_limit
+        ball.ball_rect[1] += int(ball.speed)
+
+        ball.ball_rect[0] += ball.left + ball.right
+        game_window.fill((238, 230, 133))
+        game_window.blit(ball.ball_surface, ball.ball_rect)
+        screen.blit(game_window, (0, 0))
+        pygame.display.update()
