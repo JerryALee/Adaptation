@@ -1,5 +1,13 @@
 import pygame
+import random
 
-def convertColor(color_string):
-    color_dict = {"red": (255, 0, 0), "yellow": (255, 255, 0), "green": (0, 255, 0), "blue": (0, 0, 255), "purple": (255, 0, 255)}
-    return color_dict[color_string]
+def updateGravity(gravity, timer, dt):
+    timer -= dt
+    if timer <= 0:
+        timer = 5 + random.expovariate(1/5)
+        gravity = -gravity
+    if gravity > 0:
+        gravity_direction = 1 # 重力向下
+    else:
+        gravity_direction = 0 # 重力向上
+    return gravity, timer, gravity_direction
