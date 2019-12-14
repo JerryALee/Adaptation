@@ -31,7 +31,7 @@ def generateBiofilm(timer,dt,film_lambda):
         biofilm_form = 0
     return biofilm_form, timer
 
-def checkDead(screen_size, ball, slots):
+def checkDead(ai_settings, film_color, ball_color, screen_size, ball, slots):
     pos_left = ball.ball_rect.left
     pos_right = ball.ball_rect.right
     for i in range(int(pos_left/32), int(pos_right/32) + 1):
@@ -39,4 +39,9 @@ def checkDead(screen_size, ball, slots):
             return True
     if pos_left <= 0 or pos_right >= screen_size[0]:
         return True
+
+    # 判断ball穿膜
+    if film_color != "white" and ball_color != film_color:
+        return True
+
     return False

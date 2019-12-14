@@ -172,10 +172,7 @@ def showNewGame(screen):
             elif event.type == pygame.QUIT:
                 sys.exit()
         
-        # 检查死亡
-        dead = environment.checkDead(screen_size, ball, slots)
-        if dead:
-            return score
+        
         
         # 更新重力方向和timer
         current_ticks = pygame.time.get_ticks() / 1000
@@ -198,15 +195,15 @@ def showNewGame(screen):
             biofilm_queue.pop(0)
 
         # 判断ball穿膜
+        colli_film_color = "white"
         for biofilm in biofilm_queue:
             if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
                 if biofilm.film_color == "white":
-                    ball.color = ball_color_order[random.randint(0,len(ball_color_order)-1)]
+                    ball.color = ai_settings.ball_color_order[random.randint(0,len(ai_settings.ball_color_order)-1)]
                     ball.ball_surface.fill(pygame.Color((ball.color)))
+                    colli_film_color = "white"
                 else:
-                    if ball.color != biofilm.film_color:
-                        dead = True
-                break
+                    colli_film_color = biofilm.film_color
 
         # 更新位置
         ball.speed += total_gravity
@@ -234,6 +231,10 @@ def showNewGame(screen):
         score += 0.01
         score_text = score_text_font.render("Score: " + str(int(score)), True, (0, 0, 0))
         
+        # 检查死亡：位置+颜色
+        if environment.checkDead(ai_settings, colli_film_color, ball.color, screen_size, ball, slots):
+            return score
+
         # 刷新屏幕
         game_window.fill((238, 230, 133))
         for i in range(33):
