@@ -68,6 +68,11 @@ def showIntro(screen):
                 sys.exit()
 
 def showNewGame(screen):
+    screen_size = screen.get_size()
+    game_window = pygame.Surface(screen_size)
+    game_window = game_window.convert()
+    game_window.fill((238, 230, 133))
+
     # 初始化score
     score = 0
     score_text_font = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 25)
@@ -90,10 +95,13 @@ def showNewGame(screen):
     force_const = 0.15
     total_gravity = gravity + curr_force
 
-    screen_size = screen.get_size()
-    game_window = pygame.Surface(screen_size)
-    game_window = game_window.convert()
-    game_window.fill((238, 230, 133))
+    # 初始化地图
+    slots = []
+    for i in range(64):
+        slots.append(classfile.Slot(screen_size, 84, 600))
+        slots[i].top_slot_rect[0] = 16 * i
+        slots[i].bottom_slot_rect[0] = 16 * i
+
     ball_color_order = ["red", "yellow", "green", "blue", "purple"]
     num_of_color = len(ball_color_order)
     current_ball_color = 0
@@ -167,12 +175,25 @@ def showNewGame(screen):
         ball.ball_rect[1] += int(ball.speed)
         ball.ball_rect[0] += ball.left + ball.right
 
+        # 更新slots
+        slots.pop(0)
+        for i in range(63):
+            slots[i].top_slot_rect[0] -= 16
+            slots[i].bottom_slot_rect[0] -= 16
+        last_slot = slots[-1]
+        slots.append(classfile.Slot(screen_size, last_slot.level, last_slot.height))
+
         # 更新分数
         score += 0.01
         score_text = score_text_font.render("Score: " + str(int(score)), True, (0, 0, 0))
         
         # 刷新屏幕
         game_window.fill((238, 230, 133))
+        print(slots[0].bottom_slot_rect[0])
+        for i in range(64):
+            temp_slot = slots[i]
+            game_window.blit(temp_slot.top_slot_surface, temp_slot.top_slot_rect)
+            game_window.blit(temp_slot.bottom_slot_surface, temp_slot.bottom_slot_rect)
         game_window.blit(ball.ball_surface, ball.ball_rect)
         game_window.blit(timer_text, (20, 20))
         game_window.blit(gravity_indicator, (20, 50))
