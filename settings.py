@@ -7,6 +7,7 @@ class Settings(object):
         self.screen_width = 1200
         self.screen_height = 800
         self.game_bg_color = (238, 230, 133)
+        self.level_bg_color = (160,160,160)
         self.force_const = 0.15
 
         # ball settings
@@ -17,12 +18,12 @@ class Settings(object):
         self.ball_left = 0 # 0 or -1
         self.ball_right = 0 # 0 or 1
         self.ball_speed = 0
-        self.ball_speed_limit = 4
+        self.ball_speed_limit = 3
 
         # Biofilm settings
         self.film_size = (4, 1024)
         self.film_iniPos = 1024
-        self.color_order = ["red", "yellow", "green", "blue", "purple"]
+        self.color_order = ["red", "yellow", "green", "blue", "purple","white"]
         self.film_speed = 1
         self.top_timer_limit = 8
         self.bottom_timer_limit = 2

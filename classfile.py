@@ -26,7 +26,7 @@ class Slot(object):
             self.level = 1
         elif self.level >= screen_size[1] - 600:
             self.level = screen_size[1] - 601
-        self.height = prev_slot_height + random.randint(-10, 10)
+        self.height = prev_slot_height + random.randint(-30, 30)
         if self.height <= 400:
             self.height = 401
         elif self.height >= 600:
@@ -50,7 +50,6 @@ class Biofilm(object):
         self.film_rect = pygame.Rect((self.film_pos,0)+ai_settings.film_size)
         self.film_surface = pygame.Surface(ai_settings.film_size)
         self.film_color_order = ai_settings.color_order
-        self.film_color_order.append("white")
         self.film_color = self.film_color_order[random.randint(0,len(self.film_color_order)-1)]
         # self.film_color = "green"
         self.film_surface.fill(pygame.Color(self.film_color))

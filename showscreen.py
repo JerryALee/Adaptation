@@ -69,6 +69,13 @@ def showIntro(screen):
             if event.type == pygame.QUIT:
                 sys.exit()
 
+def setLevel(screen):
+    screen_size = screen.get_size()
+    game_window = pygame.Surface(screen_size)
+    game_window = game_window.convert()
+    game_window.fill(ai_settings.game_bg_color)
+
+
 def showNewGame(screen):
     screen_size = screen.get_size()
     game_window = pygame.Surface(screen_size)
@@ -248,8 +255,8 @@ def showNewGame(screen):
         for biofilm in biofilm_queue:
             game_window.blit(biofilm.film_surface, (biofilm.film_pos,0))
         game_window.blit(gravity_timer_text, (20, 20))
-        game_window.blit(gravity_indicator, (20, 50))
-        game_window.blit(gravity_status[gravity_direction], (150, 40))
+        game_window.blit(gravity_indicator, (20, 80))
+        game_window.blit(gravity_status[gravity_direction], (150, 60))
         game_window.blit(score_text, (450, 20))
         screen.blit(game_window, (0, 0))
         pygame.display.update()
