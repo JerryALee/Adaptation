@@ -192,11 +192,21 @@ def showNewGame(screen):
             biofilm_form = 0
         # print(biofilm_timer)
 
-        #判断ball穿膜
+        # 删除出屏Biofilm
+        if len(biofilm_queue) > 0 and biofilm_queue[0].film_pos <= 0:
+            biofilm_queue.pop(0)
+
+        # 判断ball穿膜
         for biofilm in biofilm_queue:
             print(ball.ball_rect[0] + ai_settings.ball_size[0], biofilm.film_pos)
             if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
-                ball.color = biofilm.film_color
+                if biofilm.film_color == "white":
+                    ball.color = ball_color_order[random.randint(0,len(ball_color_order)-1)]
+                else:
+                    if ball.color != biofilm.film_color:
+                        dead = True
+                # ball.ball_surface.fill(pygame.Color((ball.color)))
+                break
 
         # 更新位置
         ball.speed += total_gravity
@@ -223,7 +233,6 @@ def showNewGame(screen):
         
         # 刷新屏幕
         game_window.fill((238, 230, 133))
-        print(slots[0].bottom_slot_rect[0])
         for i in range(64):
             temp_slot = slots[i]
             game_window.blit(temp_slot.top_slot_surface, temp_slot.top_slot_rect)
