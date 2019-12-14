@@ -64,7 +64,12 @@ def showIntro(screen):
             if event.type == pygame.QUIT:
                 sys.exit()
 
-def showGame(screen):
+def showNewGame(screen):
+    # 初始化score
+    score = 0
+    score_text_font = pygame.font.SysFont("方正粗活意简体", 25)
+    score_text = score_text_font.render("Score: " + str(int(score)), True, (0, 0, 0))
+
     # 初始化timer
     prev_ticks = pygame.time.get_ticks() / 1000
     timer = 5 + random.expovariate(1/5)
@@ -78,7 +83,7 @@ def showGame(screen):
     gravity_status_down = pygame.image.load("./images/down_arrow.png").convert_alpha()
     gravity_status = [gravity_status_up, gravity_status_down]
     gravity_indicator = timer_text_font.render("当前重力方向：", True, timer_text_color)
-    gravity, force = 0.1, 0.2
+    gravity, force = 0.075, 0.15
     total_gravity = gravity
 
     screen_size = screen.get_size()
@@ -88,7 +93,7 @@ def showGame(screen):
     ball_color_order = ["red", "yellow", "green", "blue", "purple"]
     num_of_color = len(ball_color_order)
     current_ball_color = 0
-    speed_limit = 4
+    speed_limit = 2 # 4
 
     ball = classfile.Ball()
 
@@ -109,7 +114,6 @@ def showGame(screen):
 
     # 游戏部分
     while True:
-        
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
@@ -139,7 +143,7 @@ def showGame(screen):
         # 检查死亡
         dead = ball.checkDead(screen_size)
         if dead:
-            break
+            return score
         
         # 更新位置
         ball.speed += total_gravity
@@ -156,6 +160,10 @@ def showGame(screen):
         prev_ticks = current_ticks
         gravity, timer, gravity_direction = environment.updateGravity(gravity, timer, dt)
         timer_text = timer_text_font.render("距离下次重力反转还有：" + str(round(timer, 2)) + " s", True, timer_text_color)
+
+        # 更新分数
+        score += 0.01
+        score_text = score_text_font.render("Score: " + str(int(score)), True, (0, 0, 0))
         
         # 刷新屏幕
         game_window.fill((238, 230, 133))
@@ -163,5 +171,20 @@ def showGame(screen):
         game_window.blit(timer_text, (20, 20))
         game_window.blit(gravity_indicator, (20, 50))
         game_window.blit(gravity_status[gravity_direction], (150, 40))
+        game_window.blit(score_text, (450, 20))
         screen.blit(game_window, (0, 0))
         pygame.display.update()
+    
+    return score
+
+def showScore(screen, score):
+    return # True or False
+
+def showGame(screen):
+    while True:
+        score = showNewGame(screen)
+        '''
+        go_to_welcome = showScore(screen, score)
+        if go_to_welcome:
+            break
+        '''
