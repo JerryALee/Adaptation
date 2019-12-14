@@ -73,7 +73,7 @@ def showNewGame(screen):
     screen_size = screen.get_size()
     game_window = pygame.Surface(screen_size)
     game_window = game_window.convert()
-    game_window.fill((238, 230, 133))
+    game_window.fill(ai_settings.game_bg_color)
 
     # 初始化score
     score = 0
@@ -108,10 +108,12 @@ def showNewGame(screen):
     # 初始化Biofilm
     biofilm_lambda = ai_settings.film_lambda
     biofilm_timer = random.expovariate(biofilm_lambda)
-    if biofilm_timer < 2:
-        biofilm_timer = 2
-    elif biofilm_timer > 8:
-        biofilm_timer = 8
+    biofilm_top_timer_limit = ai_settings.top_timer_limit
+    biofilm_bottom_timer_limit = ai_settings.bottom_timer_limit
+    if biofilm_timer < biofilm_bottom_timer_limit:
+        biofilm_timer = biofilm_bottom_timer_limit
+    elif biofilm_timer > biofilm_top_timer_limit:
+        biofilm_timer = biofilm_top_timer_limit
     biofilm_form = 0
 
     screen_size = screen.get_size()
@@ -119,10 +121,10 @@ def showNewGame(screen):
     game_window = game_window.convert()
     game_window.fill((238, 230, 133))
 
-    ball_color_order = ["red", "yellow", "green", "blue", "purple"]
+    ball_color_order = ai_settings.ball_color_order
     num_of_color = len(ball_color_order)
     current_ball_color = 0
-    speed_limit = 4
+    speed_limit = ai_settings.ball_speed_limit
 
     ball = classfile.Ball(ai_settings)
     biofilm_queue = []
