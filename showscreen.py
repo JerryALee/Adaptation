@@ -5,9 +5,11 @@ import random
 import text
 import classfile
 import environment
+import settings
 import os
 
 filepath = os.path.dirname(__file__)
+ai_settings = settings.Settings()
 
 def showAuthor(screen):
     screen_size = screen.get_size()
@@ -80,17 +82,17 @@ def showNewGame(screen):
 
     # 初始化timer
     prev_ticks = pygame.time.get_ticks() / 1000
-    timer = 5 + random.expovariate(1/5)
-    timer_text_font = pygame.font.Font(os.path.join(filepath,"fonts/SIMYOU.ttf"), 20)
-    timer_text_color = pygame.Color("dodgerblue")
-    timer_text = timer_text_font.render("距离下次重力反转还有：" + str(round(timer, 2)) + " s", True, timer_text_color)
+    gravity_timer = 5 + random.expovariate(1/5)
+    gravity_timer_text_font = pygame.font.Font(os.path.join(filepath,"fonts/SIMYOU.ttf"), 20)
+    gravity_timer_text_color = pygame.Color("dodgerblue")
+    gravity_timer_text = gravity_timer_text_font.render("距离下次重力反转还有：" + str(round(gravity_timer, 2)) + " s", True, gravity_timer_text_color)
     
     # 初始化重力
     gravity_direction = 1
     gravity_status_up = pygame.image.load(os.path.join(filepath,"images/up_arrow.png")).convert_alpha()
     gravity_status_down = pygame.image.load(os.path.join(filepath,"images/down_arrow.png")).convert_alpha()
     gravity_status = [gravity_status_up, gravity_status_down]
-    gravity_indicator = timer_text_font.render("当前重力方向：", True, timer_text_color)
+    gravity_indicator = gravity_timer_text_font.render("当前重力方向：", True, gravity_timer_text_color)
     gravity, curr_force = 0.075, 0
     force_const = 0.15
     total_gravity = gravity + curr_force
@@ -102,12 +104,28 @@ def showNewGame(screen):
         slots[i].top_slot_rect[0] = 16 * i
         slots[i].bottom_slot_rect[0] = 16 * i
 
+    # 初始化Biofilm
+    biofilm_lambda = ai_settings.film_lambda
+    biofilm_timer = random.expovariate(biofilm_lambda)
+    if biofilm_timer < 2:
+        biofilm_timer = 2
+    elif biofilm_timer > 8:
+        biofilm_timer = 8
+    biofilm_form = 0
+
+    screen_size = screen.get_size()
+    game_window = pygame.Surface(screen_size)
+    game_window = game_window.convert()
+    game_window.fill((238, 230, 133))
+
     ball_color_order = ["red", "yellow", "green", "blue", "purple"]
     num_of_color = len(ball_color_order)
     current_ball_color = 0
     speed_limit = 4
 
-    ball = classfile.Ball()
+    ball = classfile.Ball(ai_settings)
+    biofilm_queue = []
+    # biofilm = classfile.Biofilm(ai_settings)
 
     # 准备阶段
     go_start = False
@@ -121,6 +139,7 @@ def showNewGame(screen):
             break
         game_window.fill((238, 230, 133))
         game_window.blit(ball.ball_surface, ball.ball_rect)
+        # game_window.blit(biofilm.film_surface, biofilm.film_rect)
         screen.blit(game_window, (0, 0))
         pygame.display.update()
 
@@ -161,10 +180,23 @@ def showNewGame(screen):
         current_ticks = pygame.time.get_ticks() / 1000
         dt = current_ticks - prev_ticks
         prev_ticks = current_ticks
-        gravity, timer, gravity_direction = environment.updateGravity(gravity, timer, dt)
+        gravity, gravity_timer, gravity_direction = environment.updateGravity(gravity, gravity_timer, dt)
         total_gravity = gravity + curr_force
 
-        timer_text = timer_text_font.render("距离下次重力反转还有：" + str(round(timer, 2)) + " s", True, timer_text_color)
+        gravity_timer_text = gravity_timer_text_font.render("距离下次重力反转还有：" + str(round(gravity_timer, 2)) + " s", True, gravity_timer_text_color)
+
+        # 随机生成Biofilm
+        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer,dt,biofilm_lambda)
+        if biofilm_form == 1:
+            biofilm_queue.append(classfile.Biofilm(ai_settings))
+            biofilm_form = 0
+        # print(biofilm_timer)
+
+        #判断ball穿膜
+        for biofilm in biofilm_queue:
+            print(ball.ball_rect[0] + ai_settings.ball_size[0], biofilm.film_pos)
+            if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
+                ball.color = biofilm.film_color
 
         # 更新位置
         ball.speed += total_gravity
@@ -174,6 +206,8 @@ def showNewGame(screen):
             ball.speed = -speed_limit
         ball.ball_rect[1] += int(ball.speed)
         ball.ball_rect[0] += ball.left + ball.right
+        for biofilm in biofilm_queue:
+            biofilm.film_pos -= biofilm.film_speed
 
         # 更新slots
         slots.pop(0)
@@ -195,7 +229,9 @@ def showNewGame(screen):
             game_window.blit(temp_slot.top_slot_surface, temp_slot.top_slot_rect)
             game_window.blit(temp_slot.bottom_slot_surface, temp_slot.bottom_slot_rect)
         game_window.blit(ball.ball_surface, ball.ball_rect)
-        game_window.blit(timer_text, (20, 20))
+        for biofilm in biofilm_queue:
+            game_window.blit(biofilm.film_surface, (biofilm.film_pos,0))
+        game_window.blit(gravity_timer_text, (20, 20))
         game_window.blit(gravity_indicator, (20, 50))
         game_window.blit(gravity_status[gravity_direction], (150, 40))
         game_window.blit(score_text, (450, 20))
