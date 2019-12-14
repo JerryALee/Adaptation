@@ -22,6 +22,7 @@ class Ball(object):
 class Slot(object):
 
     def __init__(self):
+        self.mmm
         
 class Biofilm(object):
     def __init__(self):
