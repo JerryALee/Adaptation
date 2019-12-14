@@ -143,7 +143,8 @@ def showNewGame(screen):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYUP:
-                go_start = True
+                if event.key == pygame.K_i:
+                    go_start = True
             elif event.type == pygame.QUIT:
                 sys.exit()
         if go_start:
