@@ -53,3 +53,17 @@ def getGameText():
     myfont2 = pygame.font.Font(os.path.join(filepath,"fonts/SIMYOU.ttf"), 30)
     intro = myfont2.render('这是游戏玩法的介绍……其中要手动换行', True, (0, 0, 0))
     return (intro, back, back1)
+
+def getLevelText():
+    option_font = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 20)
+    v3color = option_font.render("Three Color", True, (0,0,0))
+    v5color = option_font.render("Five Color", True, (0,0,0))
+    v7color = option_font.render("Seven Color", True, (0,0,0))
+    SpeedLow = option_font.render("Low Speed", True, (0,0,0))
+    SpeedMid = option_font.render("Midle Speed", True, (0,0,0))
+    SpeedHig = option_font.render("High Speed", True, (0,0,0))
+
+    level_title_font = pygame.font.Font(os.path.join(filepath,"fonts/ARLRDBD.ttf"), 100)
+    level_title = level_title_font.render("Level Selection",True, (116, 0, 161))
+
+    return (level_title, v3color, v5color, v7color, SpeedLow, SpeedMid, SpeedHig)
