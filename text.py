@@ -2,7 +2,9 @@ import pygame
 pygame.font.init()
 
 def getWelcomeText():
-    myfont1 = pygame.font.SysFont('方正粗活意简体', 50)
+    myfont1 = pygame.font.SysFont('华文宋体', 50)
+    #print(pygame.font.get_fonts()) #获取系统字体名称列表
+    # myfont1 = pygame.font.Font('simkai.ttf',50)
     ksyx = myfont1.render('开始游戏', True, (0, 0, 0))
     ksyx1 = myfont1.render('开始游戏', True, (255, 0, 0))
     yxsm = myfont1.render('游戏说明', True, (0, 0, 0))
@@ -18,7 +20,7 @@ def getWelcomeText():
     
 
 def getAuthorText():
-    myfont1 = pygame.font.SysFont('方正粗活意简体', 50)
+    myfont1 = pygame.font.SysFont('华文宋体', 50)
     back = myfont1.render('返回', True, (0, 0, 0))
     back1 = myfont1.render('返回', True, (255, 0, 0))
 

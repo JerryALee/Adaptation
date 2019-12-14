@@ -5,6 +5,9 @@ import random
 import text
 import classfile
 import environment
+import os
+
+filepath = os.path.dirname(__file__)
 
 def showAuthor(screen):
     screen_size = screen.get_size()
@@ -74,8 +77,8 @@ def showGame(screen):
     
     # 初始化重力
     gravity_direction = 1
-    gravity_status_up = pygame.image.load("./images/up_arrow.png").convert_alpha()
-    gravity_status_down = pygame.image.load("./images/down_arrow.png").convert_alpha()
+    gravity_status_up = pygame.image.load(os.path.join(filepath,"images/up_arrow.png")).convert_alpha()
+    gravity_status_down = pygame.image.load(os.path.join(filepath,"images/down_arrow.png")).convert_alpha()
     gravity_status = [gravity_status_up, gravity_status_down]
     gravity_indicator = timer_text_font.render("当前重力方向：", True, timer_text_color)
     gravity, force = 0.1, 0.2
