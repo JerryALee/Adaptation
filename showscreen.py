@@ -158,26 +158,26 @@ def showNewGame(screen):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_i:
                     curr_force -= force_const
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_k:
                     curr_force += force_const
                 elif event.key == pygame.K_SPACE:
                     current_ball_color = (current_ball_color + 1) % num_of_color
                     ball.color = ball_color_order[current_ball_color]
                     ball.ball_surface.fill(pygame.Color((ball.color)))
-                elif event.key == pygame.K_LEFT:
+                elif event.key == pygame.K_j:
                     ball.left = -1
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_l:
                     ball.right = 1
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_j:
                     ball.left = 0
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_l:
                     ball.right = 0
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_i:
                     curr_force += force_const
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_k:
                     curr_force -= force_const
             elif event.type == pygame.QUIT:
                 sys.exit()
