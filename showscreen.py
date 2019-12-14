@@ -123,6 +123,7 @@ def setLevel(screen):
                 sys.exit()
         screen.blit(level_window, (0, 0))
         pygame.display.update()
+    return # 返回难度情况，给showNewGame作为参数传入
 
 def showNewGame(screen):
     screen_size = screen.get_size()
@@ -316,6 +317,7 @@ def showScore(screen, score):
 
 def showGame(screen):
     while True:
+        level = setLevel(screen)
         score = showNewGame(screen)
         '''
         go_to_welcome = showScore(screen, score)
