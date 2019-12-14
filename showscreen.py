@@ -99,10 +99,11 @@ def showNewGame(screen):
 
     # 初始化地图
     slots = []
-    for i in range(64):
+    flag = 0
+    for i in range(33):
         slots.append(classfile.Slot(screen_size, 84, 600))
-        slots[i].top_slot_rect[0] = 16 * i
-        slots[i].bottom_slot_rect[0] = 16 * i
+        slots[i].top_slot_rect[0] = 32 * i
+        slots[i].bottom_slot_rect[0] = 32 * i
 
     # 初始化Biofilm
     biofilm_lambda = ai_settings.film_lambda
@@ -172,7 +173,7 @@ def showNewGame(screen):
                 sys.exit()
         
         # 检查死亡
-        dead = ball.checkDead(screen_size)
+        dead = environment.checkDead(screen_size, ball, slots)
         if dead:
             return score
         
@@ -194,7 +195,6 @@ def showNewGame(screen):
 
         #判断ball穿膜
         for biofilm in biofilm_queue:
-            print(ball.ball_rect[0] + ai_settings.ball_size[0], biofilm.film_pos)
             if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
                 ball.color = biofilm.film_color
 
@@ -210,12 +210,15 @@ def showNewGame(screen):
             biofilm.film_pos -= biofilm.film_speed
 
         # 更新slots
-        slots.pop(0)
-        for i in range(63):
-            slots[i].top_slot_rect[0] -= 16
-            slots[i].bottom_slot_rect[0] -= 16
-        last_slot = slots[-1]
-        slots.append(classfile.Slot(screen_size, last_slot.level, last_slot.height))
+        flag = (flag + 1) % 32
+        if flag % 4 == 0:
+            for i in range(33):
+                slots[i].top_slot_rect[0] -= 4
+                slots[i].bottom_slot_rect[0] -= 4
+        if flag == 0:
+            slots.pop(0)
+            last_slot = slots[-1]
+            slots.append(classfile.Slot(screen_size, last_slot.level, last_slot.height))
 
         # 更新分数
         score += 0.01
@@ -223,8 +226,7 @@ def showNewGame(screen):
         
         # 刷新屏幕
         game_window.fill((238, 230, 133))
-        print(slots[0].bottom_slot_rect[0])
-        for i in range(64):
+        for i in range(33):
             temp_slot = slots[i]
             game_window.blit(temp_slot.top_slot_surface, temp_slot.top_slot_rect)
             game_window.blit(temp_slot.bottom_slot_surface, temp_slot.bottom_slot_rect)

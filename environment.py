@@ -31,3 +31,12 @@ def generateBiofilm(timer,dt,film_lambda):
         biofilm_form = 0
     return biofilm_form, timer
 
+def checkDead(screen_size, ball, slots):
+    pos_left = ball.ball_rect.left
+    pos_right = ball.ball_rect.right
+    for i in range(int(pos_left/32), int(pos_right/32) + 1):
+        if ball.ball_rect.top <= slots[i].top_slot_rect.bottom or ball.ball_rect.bottom >= slots[i].bottom_slot_rect.top:
+            return True
+    if pos_left <= 0 or pos_right >= screen_size[0]:
+        return True
+    return False

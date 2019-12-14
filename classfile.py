@@ -36,11 +36,11 @@ class Slot(object):
             self.height = 401
         elif self.height >= 600:
             self.height = 599
-        self.bottom_slot_rect = pygame.Rect(screen_size[0] - 16, screen_size[1] - self.level, 16, self.level)
-        self.bottom_slot_surface = pygame.Surface((16, self.level))
+        self.bottom_slot_rect = pygame.Rect(screen_size[0], screen_size[1] - self.level, 32, self.level)
+        self.bottom_slot_surface = pygame.Surface((32, self.level))
         self.bottom_slot_surface.fill((178, 233, 238))
-        self.top_slot_rect = pygame.Rect(screen_size[0] - 16, 0, 16, screen_size[1] - self.level - self.height)
-        self.top_slot_surface = pygame.Surface((16, screen_size[1] - self.level - self.height))
+        self.top_slot_rect = pygame.Rect(screen_size[0], 0, 32, screen_size[1] - self.level - self.height)
+        self.top_slot_surface = pygame.Surface((32, screen_size[1] - self.level - self.height))
         self.top_slot_surface.fill((178, 233, 238))
         
     def updateSlot(self):
