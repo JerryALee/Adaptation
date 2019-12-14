@@ -23,3 +23,6 @@ class Slot(object):
 
     def __init__(self):
         
+class Biofilm(object):
+    def __init__(self):
+        self
