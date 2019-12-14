@@ -70,13 +70,13 @@ def showIntro(screen):
 def showNewGame(screen):
     # 初始化score
     score = 0
-    score_text_font = pygame.font.SysFont("方正粗活意简体", 25)
+    score_text_font = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 25)
     score_text = score_text_font.render("Score: " + str(int(score)), True, (0, 0, 0))
 
     # 初始化timer
     prev_ticks = pygame.time.get_ticks() / 1000
     timer = 5 + random.expovariate(1/5)
-    timer_text_font = pygame.font.SysFont("幼圆", 20)
+    timer_text_font = pygame.font.Font(os.path.join(filepath,"fonts/SIMYOU.ttf"), 20)
     timer_text_color = pygame.Color("dodgerblue")
     timer_text = timer_text_font.render("距离下次重力反转还有：" + str(round(timer, 2)) + " s", True, timer_text_color)
     
