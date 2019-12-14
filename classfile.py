@@ -18,3 +18,8 @@ class Ball(object):
             return True
         else:
             return False
+
+class Slot(object):
+
+    def __init__(self):
+        
