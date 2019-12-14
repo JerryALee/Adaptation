@@ -26,17 +26,17 @@ class Slot(object):
             self.level = 1
         elif self.level >= screen_size[1] - 600:
             self.level = screen_size[1] - 601
-        self.height = prev_slot_height + random.randint(-10, 10)
+        self.height = prev_slot_height + random.randint(-30, 30)
         if self.height <= 400:
             self.height = 401
         elif self.height >= 600:
             self.height = 599
         self.bottom_slot_rect = pygame.Rect(screen_size[0], screen_size[1] - self.level, ai_settings.slot_width, self.level)
         self.bottom_slot_surface = pygame.Surface((ai_settings.slot_width, self.level))
-        self.bottom_slot_surface.fill((178, 233, 238))
+        self.bottom_slot_surface.fill((192, 192, 192))
         self.top_slot_rect = pygame.Rect(screen_size[0], 0, ai_settings.slot_width, screen_size[1] - self.level - self.height)
         self.top_slot_surface = pygame.Surface((ai_settings.slot_width, screen_size[1] - self.level - self.height))
-        self.top_slot_surface.fill((178, 233, 238))
+        self.top_slot_surface.fill((192, 192, 192))
         
     def updateSlot(self):
         self.bottom_slot_rect[0] -= 1
@@ -47,14 +47,10 @@ class Biofilm(object):
     def __init__(self, ai_settings):
         self.name = "biofilm"
         self.film_pos = ai_settings.film_iniPos
-        self.film_rect = pygame.Rect((self.film_pos,0)+ai_settings.film_size)
+        self.film_rect = pygame.Rect((self.film_pos, 0) + ai_settings.film_size)
         self.film_surface = pygame.Surface(ai_settings.film_size)
         self.film_color_order = ai_settings.color_order
-        self.film_color_order.append("white")
-        self.film_color = self.film_color_order[random.randint(0,len(self.film_color_order)-1)]
-        # self.film_color = "green"
+        self.film_color = self.film_color_order[random.randint(0,len(self.film_color_order) - 1)]
         self.film_surface.fill(pygame.Color(self.film_color))
         self.film_speed = ai_settings.film_speed
         
-
-

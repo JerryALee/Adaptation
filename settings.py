@@ -11,18 +11,18 @@ class Settings(object):
 
         # ball settings
         self.ball_size = (40, 40)
-        self.ball_iniPos = (492,364)
+        self.ball_iniPos = (492, 364)
         self.ball_iniCol = "red"
         self.ball_color_order = ["red", "yellow", "green", "blue", "purple"]
         self.ball_left = 0 # 0 or -1
         self.ball_right = 0 # 0 or 1
         self.ball_speed = 0
-        self.ball_speed_limit = 4
+        self.ball_speed_limit = 3
 
         # Biofilm settings
         self.film_size = (4, 1024)
         self.film_iniPos = 1024
-        self.color_order = ["red", "yellow", "green", "blue", "purple"]
+        self.color_order = ["red", "yellow", "green", "blue", "purple", "white"]
         self.film_speed = 1
         self.top_timer_limit = 8
         self.bottom_timer_limit = 2
