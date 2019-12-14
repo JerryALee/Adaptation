@@ -26,3 +26,4 @@ class Slot(object):
 class Biofilm(object):
     def __init__(self):
         self.name = "biofilm"
+        self.film_color = "white"
