@@ -3,11 +3,14 @@ import sys
 import random
 import text
 import showscreen
+import os
 
+filepath = os.path.dirname(__file__)
 pygame.init()
 screen = pygame.display.set_mode((1024, 768)) # 窗口大小
 pygame.display.set_caption("Adaptation") # 窗口名，Adaptation
-pygame.display.set_icon(pygame.image.load("./images/Logo.ico")) # 图标
+# pygame.display.set_icon(pygame.image.load("./images/Logo.ico")) # 图标
+pygame.display.set_icon(pygame.image.load(os.path.join(filepath,"images/Logo.ico")))
 screen_size = screen.get_size()
 # clock = pygame.time.Clock()
 # clock.tick(30) # FPS
