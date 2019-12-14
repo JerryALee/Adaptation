@@ -97,7 +97,7 @@ def showNewGame(screen):
     ball_color_order = ["red", "yellow", "green", "blue", "purple"]
     num_of_color = len(ball_color_order)
     current_ball_color = 0
-    speed_limit = 2 # 4
+    speed_limit = 4
 
     ball = classfile.Ball()
 
