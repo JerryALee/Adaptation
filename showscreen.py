@@ -100,10 +100,11 @@ def showNewGame(screen):
     # 初始化地图
     slots = []
     flag = 0
-    for i in range(33):
+    num_of_slots = int(screen_size[0]/ai_settings.slot_width) + 1
+    for i in range(num_of_slots):
         slots.append(classfile.Slot(screen_size, 84, 600))
-        slots[i].top_slot_rect[0] = 32 * i
-        slots[i].bottom_slot_rect[0] = 32 * i
+        slots[i].top_slot_rect[0] = ai_settings.slot_width * i
+        slots[i].bottom_slot_rect[0] = ai_settings.slot_width * i
 
     # 初始化Biofilm
     biofilm_lambda = ai_settings.film_lambda
@@ -217,11 +218,11 @@ def showNewGame(screen):
             biofilm.film_pos -= biofilm.film_speed
 
         # 更新slots
-        flag = (flag + 1) % 32
-        if flag % 4 == 0:
-            for i in range(33):
-                slots[i].top_slot_rect[0] -= 4
-                slots[i].bottom_slot_rect[0] -= 4
+        flag = (flag + 1) % ai_settings.slot_width
+        if flag % 8 == 0:
+            for i in range(num_of_slots):
+                slots[i].top_slot_rect[0] -= 8
+                slots[i].bottom_slot_rect[0] -= 8
         if flag == 0:
             slots.pop(0)
             last_slot = slots[-1]
@@ -237,7 +238,7 @@ def showNewGame(screen):
 
         # 刷新屏幕
         game_window.fill((238, 230, 133))
-        for i in range(33):
+        for i in range(num_of_slots):
             temp_slot = slots[i]
             game_window.blit(temp_slot.top_slot_surface, temp_slot.top_slot_rect)
             game_window.blit(temp_slot.bottom_slot_surface, temp_slot.bottom_slot_rect)
