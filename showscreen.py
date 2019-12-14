@@ -86,8 +86,9 @@ def showNewGame(screen):
     gravity_status_down = pygame.image.load(os.path.join(filepath,"images/down_arrow.png")).convert_alpha()
     gravity_status = [gravity_status_up, gravity_status_down]
     gravity_indicator = timer_text_font.render("当前重力方向：", True, timer_text_color)
-    gravity, force = 0.075, 0.15
-    total_gravity = gravity
+    gravity, curr_force = 0.075, 0
+    force_const = 0.15
+    total_gravity = gravity + curr_force
 
     screen_size = screen.get_size()
     game_window = pygame.Surface(screen_size)
@@ -120,9 +121,9 @@ def showNewGame(screen):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    total_gravity = gravity - force
+                    curr_force -= force_const
                 elif event.key == pygame.K_DOWN:
-                    total_gravity = gravity + force
+                    curr_force += force_const
                 elif event.key == pygame.K_SPACE:
                     current_ball_color = (current_ball_color + 1) % num_of_color
                     ball.color = ball_color_order[current_ball_color]
@@ -137,9 +138,9 @@ def showNewGame(screen):
                 elif event.key == pygame.K_RIGHT:
                     ball.right = 0
                 elif event.key == pygame.K_UP:
-                    total_gravity = gravity
+                    curr_force += force_const
                 elif event.key == pygame.K_DOWN:
-                    total_gravity = gravity
+                    curr_force -= force_const
             elif event.type == pygame.QUIT:
                 sys.exit()
         
@@ -148,6 +149,15 @@ def showNewGame(screen):
         if dead:
             return score
         
+        # 更新重力方向和timer
+        current_ticks = pygame.time.get_ticks() / 1000
+        dt = current_ticks - prev_ticks
+        prev_ticks = current_ticks
+        gravity, timer, gravity_direction = environment.updateGravity(gravity, timer, dt)
+        total_gravity = gravity + curr_force
+
+        timer_text = timer_text_font.render("距离下次重力反转还有：" + str(round(timer, 2)) + " s", True, timer_text_color)
+
         # 更新位置
         ball.speed += total_gravity
         if ball.speed >= speed_limit:
@@ -156,13 +166,6 @@ def showNewGame(screen):
             ball.speed = -speed_limit
         ball.ball_rect[1] += int(ball.speed)
         ball.ball_rect[0] += ball.left + ball.right
-
-        # 更新重力方向和timer
-        current_ticks = pygame.time.get_ticks() / 1000
-        dt = current_ticks - prev_ticks
-        prev_ticks = current_ticks
-        gravity, timer, gravity_direction = environment.updateGravity(gravity, timer, dt)
-        timer_text = timer_text_font.render("距离下次重力反转还有：" + str(round(timer, 2)) + " s", True, timer_text_color)
 
         # 更新分数
         score += 0.01
