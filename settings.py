@@ -13,6 +13,7 @@ class Settings(object):
         self.ball_size = (40, 40)
         self.ball_iniPos = (492,364)
         self.ball_iniCol = "red"
+        self.ball_color_order = ["red", "yellow", "green", "blue", "purple"]
         self.ball_left = 0 # 0 or -1
         self.ball_right = 0 # 0 or 1
         self.ball_speed = 0
