@@ -1,7 +1,9 @@
 import pygame
 import random
 import environment
-import random
+import settings
+
+ai_settings = settings.Settings()
 
 class Ball(object):
     
@@ -29,11 +31,11 @@ class Slot(object):
             self.height = 401
         elif self.height >= 600:
             self.height = 599
-        self.bottom_slot_rect = pygame.Rect(screen_size[0], screen_size[1] - self.level, 32, self.level)
-        self.bottom_slot_surface = pygame.Surface((32, self.level))
+        self.bottom_slot_rect = pygame.Rect(screen_size[0], screen_size[1] - self.level, ai_settings.slot_width, self.level)
+        self.bottom_slot_surface = pygame.Surface((ai_settings.slot_width, self.level))
         self.bottom_slot_surface.fill((178, 233, 238))
-        self.top_slot_rect = pygame.Rect(screen_size[0], 0, 32, screen_size[1] - self.level - self.height)
-        self.top_slot_surface = pygame.Surface((32, screen_size[1] - self.level - self.height))
+        self.top_slot_rect = pygame.Rect(screen_size[0], 0, ai_settings.slot_width, screen_size[1] - self.level - self.height)
+        self.top_slot_surface = pygame.Surface((ai_settings.slot_width, screen_size[1] - self.level - self.height))
         self.top_slot_surface.fill((178, 233, 238))
         
     def updateSlot(self):

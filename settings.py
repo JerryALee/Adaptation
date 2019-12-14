@@ -9,7 +9,7 @@ class Settings(object):
         self.game_bg_color = (238, 230, 133)
         self.force_const = 0.15
 
-        #ball settings
+        # ball settings
         self.ball_size = (40, 40)
         self.ball_iniPos = (492,364)
         self.ball_iniCol = "red"
@@ -19,7 +19,7 @@ class Settings(object):
         self.ball_speed = 0
         self.ball_speed_limit = 4
 
-        #Biofilm settings
+        # Biofilm settings
         self.film_size = (4, 1024)
         self.film_iniPos = 1024
         self.color_order = ["red", "yellow", "green", "blue", "purple"]
@@ -27,3 +27,6 @@ class Settings(object):
         self.top_timer_limit = 8
         self.bottom_timer_limit = 2
         self.film_lambda = 1/6
+
+        # slots settings
+        self.slot_width = 64
