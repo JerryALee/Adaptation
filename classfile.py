@@ -22,6 +22,8 @@ class Ball(object):
 class Slot(object):
 
     def __init__(self):
+        self.mmm
+        
         self.name = "map slot"
 class Biofilm(object):
     def __init__(self):
