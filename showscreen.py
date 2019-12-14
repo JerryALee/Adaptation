@@ -202,10 +202,10 @@ def showNewGame(screen):
             if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
                 if biofilm.film_color == "white":
                     ball.color = ball_color_order[random.randint(0,len(ball_color_order)-1)]
+                    ball.ball_surface.fill(pygame.Color((ball.color)))
                 else:
                     if ball.color != biofilm.film_color:
                         dead = True
-                # ball.ball_surface.fill(pygame.Color((ball.color)))
                 break
 
         # 更新位置

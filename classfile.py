@@ -15,13 +15,6 @@ class Ball(object):
         self.left = ai_settings.ball_left
         self.right = ai_settings.ball_right
         self.speed = ai_settings.ball_speed
-    
-    def checkDead(self, screen_size):
-        if self.ball_rect.left <= 0 or self.ball_rect.right >= screen_size[0] \
-            or self.ball_rect.top <= 0 or self.ball_rect.bottom >= screen_size[1]:
-            return True
-        else:
-            return False
 
 class Slot(object):
 
