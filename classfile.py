@@ -18,3 +18,7 @@ class Ball(object):
             return True
         else:
             return False
+
+class Biofilm(object):
+    def __init__(self):
+        self
