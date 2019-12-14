@@ -71,10 +71,58 @@ def showIntro(screen):
 
 def setLevel(screen):
     screen_size = screen.get_size()
-    game_window = pygame.Surface(screen_size)
-    game_window = game_window.convert()
-    game_window.fill(ai_settings.game_bg_color)
+    level_window = pygame.Surface(screen_size)
+    level_window = level_window.convert()
+    level_window.fill(ai_settings.level_bg_color)
 
+    #text
+    (level_title, v3color, v5color, v7color, SpeedLow, SpeedMid, SpeedHig) = text.getLevelText()
+    middle_pos = (screen_size[0] - v5color.get_size()[0])/2
+    middle_pos1 = (screen_size[0] - SpeedMid.get_size()[0])/2
+    quater_pos = (middle_pos - v3color.get_size()[0])/2
+    quater_pos1 = (middle_pos1 - SpeedLow.get_size()[0])/2
+    quater3_pos = (middle_pos + v5color.get_size()[0]) + (screen_size[0] - (middle_pos + v5color.get_size()[0]) - v7color.get_size()[0])/2
+    quater3_pos1 = (middle_pos + SpeedMid.get_size()[0]) + (screen_size[0] - (middle_pos + SpeedMid.get_size()[0]) - SpeedHig.get_size()[0])/2
+    
+    v3color_surface = pygame.Surface(v3color.get_size())
+    v5color_surface = pygame.Surface(v5color.get_size())
+    v7color_surface = pygame.Surface(v7color.get_size())
+    SpeedLow_surface = pygame.Surface(v7color.get_size())
+    SpeedMid_surface = pygame.Surface(v7color.get_size())
+    SpeedHig_surface = pygame.Surface(v7color.get_size())
+
+    level_button_color = ai_settings.level_button_color
+    
+    v3color_surface.fill(level_button_color)
+    v5color_surface.fill(level_button_color)
+    v7color_surface.fill(level_button_color)
+    SpeedLow_surface.fill(level_button_color)
+    SpeedMid_surface.fill(level_button_color)
+    SpeedHig_surface.fill(level_button_color)
+
+    while True:
+        level_window.blit(level_title, (((screen_size[0] - level_title.get_size()[0])/2, 50)))
+        
+        level_window.blit(v3color_surface, (quater_pos, 320))
+        level_window.blit(v5color_surface, (middle_pos, 320))
+        level_window.blit(v7color_surface, (quater3_pos, 320))
+        level_window.blit(SpeedLow_surface, (quater_pos1, 480))
+        level_window.blit(SpeedMid_surface, (middle_pos1, 480))
+        level_window.blit(SpeedHig_surface, (quater3_pos1, 480))
+        
+        level_window.blit(v3color, (quater_pos, 320))
+        level_window.blit(v5color, (middle_pos, 320))
+        level_window.blit(v7color, (quater3_pos, 320))
+        level_window.blit(SpeedLow, (quater_pos1, 480))
+        level_window.blit(SpeedMid, (middle_pos1, 480))
+        level_window.blit(SpeedHig, (quater3_pos1, 480))
+        
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+        screen.blit(level_window, (0, 0))
+        pygame.display.update()
 
 def showNewGame(screen):
     screen_size = screen.get_size()
@@ -183,8 +231,6 @@ def showNewGame(screen):
             elif event.type == pygame.QUIT:
                 sys.exit()
         
-        
-        
         # 更新重力方向和timer
         current_ticks = pygame.time.get_ticks() / 1000
         dt = current_ticks - prev_ticks
@@ -209,6 +255,7 @@ def showNewGame(screen):
         colli_film_color = "white"
         for biofilm in biofilm_queue:
             if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
+                score += 10
                 if biofilm.film_color == "white":
                     ball.color = ai_settings.ball_color_order[random.randint(0,len(ai_settings.ball_color_order)-1)]
                     ball.ball_surface.fill(pygame.Color((ball.color)))
