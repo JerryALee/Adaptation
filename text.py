@@ -73,3 +73,18 @@ def getLevelText():
     click1 = myfont1.render('确认', True, (255, 0, 0))
 
     return (level_title, v3color, v5color, v7color, SpeedLow, SpeedMid, SpeedHig, back, back1, click, click1)
+
+def getScoreText(score):
+    score_text_font = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 60)
+    score_text = score_text_font.render(str(int(score)), True, (0, 0, 0))
+
+    myfont1 = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 50)
+    back = myfont1.render('返回', True, (0, 0, 0))
+    back1 = myfont1.render('返回', True, (255, 0, 0))
+    again = myfont1.render('重来', True, (0, 0, 0))
+    again1 = myfont1.render('重来', True, (255, 0, 0))
+
+    score_title_font = pygame.font.Font(os.path.join(filepath,"fonts/ARLRDBD.ttf"), 100)
+    score_title = score_title_font.render("Your Score",True, (116, 0, 161))
+    
+    return (score_title, score_text, back, back1, again, again1)

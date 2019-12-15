@@ -110,9 +110,9 @@ def setLevel(screen):
     color_check = 0
     speed_check = 0
     option_font_height = v3color.get_size()[1]
-
     while True:
         buttons = pygame.mouse.get_pressed()
+        print(buttons)
         x1, y1 = pygame.mouse.get_pos()
         if buttons[0] and x1 >= quater_pos  and x1 <= quater_pos + v3color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
@@ -399,15 +399,57 @@ def showNewGame(screen, color_check, speed_check):
     return score
 
 def showScore(screen, score):
-    return # True or False
+
+    screen_size = screen.get_size()
+    score_window = pygame.Surface(screen_size)
+    score_window = score_window.convert()
+    score_window.fill(ai_settings.game_bg_color)
+
+    (score_title, score_text, back, back1, again, again1) = text.getScoreText(score)
+
+    back_size = back.get_size()
+    again_size = again.get_size()
+    back_pos = (612, 640)
+    again_pos = (412-again_size[0],640)
+
+    while True:
+        buttons = pygame.mouse.get_pressed()
+        x1, y1 = pygame.mouse.get_pos()
+        if x1 >= again_pos[0] and x1 <= again_pos[0] + again_size[0] \
+            and y1 >= again_pos[1] and y1 <= again_pos[1] + again_size[1]:
+            score_window.blit(again1, again_pos)
+            if buttons[0]:
+                return True
+        elif x1 >= back_pos[0] and x1 <= back_pos[0] + back_size[0] \
+            and y1 >= back_pos[1] and y1 <= back_pos[1] + back_size[1]:
+            score_window.blit(back1, back_pos)
+            if buttons[0]:
+                return False
+        else:
+            score_window.blit(again,again_pos)
+            score_window.blit(back,back_pos)
+
+        score_window.blit(score_title, (((screen_size[0] - score_title.get_size()[0])/2, 50)))
+        score_window.blit(score_text, (((screen_size[0] - score_text.get_size()[0])/2, 360)))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+        screen.blit(score_window, (0, 0))
+        pygame.display.update()
+
 
 def showGame(screen):
     while True:
         color_check, speed_check = setLevel(screen)
+        game_state = True
         if color_check == 0 or speed_check == 0:
             break
         else:
-            score = showNewGame(screen, color_check, speed_check)
+            while game_state:
+                score = showNewGame(screen, color_check, speed_check)
+                game_state = showScore(screen, score)
+            
         '''
         go_to_welcome = showScore(screen, score)
         if go_to_welcome:
