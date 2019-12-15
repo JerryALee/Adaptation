@@ -35,4 +35,4 @@ class Settings(object):
         self.film_lambda = 1/6
 
         # slots settings
-        self.slot_width = 64
+        self.slot_width = 128

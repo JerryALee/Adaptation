@@ -21,16 +21,16 @@ class Ball(object):
 class Slot(object):
 
     def __init__(self, screen_size, prev_slot_level, prev_slot_height):
-        self.level = prev_slot_level + random.randint(-10, 10)
+        self.level = prev_slot_level + 10 * random.randint(-1, 1)
         if self.level <= 0:
-            self.level = 1
+            self.level = 10
         elif self.level >= screen_size[1] - 600:
-            self.level = screen_size[1] - 601
-        self.height = prev_slot_height + random.randint(-30, 30)
+            self.level = screen_size[1] - 610
+        self.height = prev_slot_height + 10 * random.randint(-3, 3)
         if self.height <= 400:
-            self.height = 401
+            self.height = 410
         elif self.height >= 600:
-            self.height = 599
+            self.height = 590
         self.bottom_slot_rect = pygame.Rect(screen_size[0], screen_size[1] - self.level, ai_settings.slot_width, self.level)
         self.bottom_slot_surface = pygame.Surface((ai_settings.slot_width, self.level))
         self.bottom_slot_surface.fill((192, 192, 192))

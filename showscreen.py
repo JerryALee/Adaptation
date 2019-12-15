@@ -117,38 +117,38 @@ def setLevel(screen):
         if buttons[0] and x1 >= quater_pos  and x1 <= quater_pos + v3color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
             if color_check != 0:
-                color_surface_list[color_check-1].fill(level_button_color)
+                color_surface_list[color_check - 1].fill(level_button_color)
             v3color_surface.fill(pygame.Color("red"))
             color_check = 1
         elif buttons[0] and x1 >= middle_pos and x1 <= middle_pos + v5color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
             if color_check != 0:
-                color_surface_list[color_check-1].fill(level_button_color)
+                color_surface_list[color_check - 1].fill(level_button_color)
             v5color_surface.fill(pygame.Color("red"))
             color_check = 2
         elif buttons[0] and x1 >= quater3_pos and x1 <= quater3_pos + v7color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
             if color_check != 0:
-                color_surface_list[color_check-1].fill(level_button_color)
+                color_surface_list[color_check - 1].fill(level_button_color)
             v7color_surface.fill(pygame.Color("red"))
             color_check = 3
 
         if buttons[0] and x1 >= quater_pos and x1 <= quater_pos + SpeedLow.get_size()[0] \
             and y1 >= 480 and y1 <= 480 + option_font_height:
             if speed_check != 0:
-                speed_surface_list[speed_check-1].fill(level_button_color)
+                speed_surface_list[speed_check - 1].fill(level_button_color)
             SpeedLow_surface.fill(pygame.Color("red"))
             speed_check = 1
         elif buttons[0] and x1 >= middle_pos1 and x1 <= middle_pos1 + SpeedMid.get_size()[0] \
             and y1 >= 480 and y1 <= 480 + option_font_height:
             if speed_check != 0:
-                speed_surface_list[speed_check-1].fill(level_button_color)
+                speed_surface_list[speed_check - 1].fill(level_button_color)
             SpeedMid_surface.fill(pygame.Color("red"))
             speed_check = 2
         elif buttons[0] and x1 >= quater_pos and x1 <= quater3_pos + SpeedHig.get_size()[0] \
             and y1 >= 480 and y1 <= 480 + option_font_height:
             if speed_check != 0:
-                speed_surface_list[speed_check-1].fill(level_button_color)
+                speed_surface_list[speed_check - 1].fill(level_button_color)
             SpeedHig_surface.fill(pygame.Color("red"))
             speed_check = 3
 
@@ -206,7 +206,8 @@ def showNewGame(screen, color_check, speed_check):
     gravity_timer = 5 + random.expovariate(1/5)
     gravity_timer_text_font = pygame.font.Font(os.path.join(filepath,"fonts/SIMYOU.ttf"), 20)
     gravity_timer_text_color = pygame.Color("dodgerblue")
-    gravity_timer_text = gravity_timer_text_font.render("距离下次重力反转还有：" + str(round(gravity_timer, 2)) + " s", True, gravity_timer_text_color)
+    gravity_timer_text = gravity_timer_text_font.render("距离下次重力反转还有：", True, gravity_timer_text_color)
+    gravity_timer_text_amount = gravity_timer_text_font.render(str(round(gravity_timer, 1)) + " s", True, gravity_timer_text_color)
     
     # 初始化重力
     gravity_direction = 1
@@ -221,11 +222,11 @@ def showNewGame(screen, color_check, speed_check):
     # 初始化地图
     slots = []
     flag = 0
-    num_of_slots = int(screen_size[0]/ai_settings.slot_width) + 1
-    for i in range(num_of_slots):
+    slot_width = ai_settings.slot_width
+    for i in range(int(screen_size[0]/slot_width) + 1):
         slots.append(classfile.Slot(screen_size, 84, 600))
-        slots[i].top_slot_rect[0] = ai_settings.slot_width * i
-        slots[i].bottom_slot_rect[0] = ai_settings.slot_width * i
+        slots[i].top_slot_rect[0] = slot_width * i
+        slots[i].bottom_slot_rect[0] = slot_width * i
 
     # 显示难度信息
     level_option_font = pygame.font.Font(os.path.join(filepath,"fonts/ARLRDBD.ttf"), 18)
@@ -238,8 +239,8 @@ def showNewGame(screen, color_check, speed_check):
     color_levels = (v3color, v5color, v7color)
     speed_levels = (SpeedLow, SpeedMid, SpeedHig)
     
-    color_choice = color_levels[color_check-1]
-    speed_choice = speed_levels[speed_check-1]
+    color_choice = color_levels[color_check - 1]
+    speed_choice = speed_levels[speed_check - 1]
 
     # 初始化Biofilm
     biofilm_lambda = ai_settings.film_lambda
@@ -257,7 +258,7 @@ def showNewGame(screen, color_check, speed_check):
     game_window = game_window.convert()
     game_window.fill((238, 230, 133))
 
-    ball_color_order = ai_settings.ball_color_order[:(2*color_check+1)]
+    ball_color_order = ai_settings.ball_color_order[:(2*color_check + 1)]
     num_of_color = len(ball_color_order)
     current_ball_color = 0
     if speed_check == 1:
@@ -320,13 +321,13 @@ def showNewGame(screen, color_check, speed_check):
         current_ticks = pygame.time.get_ticks() / 1000
         dt = current_ticks - prev_ticks
         prev_ticks = current_ticks
-        gravity, gravity_timer, gravity_direction = environment.updateGravity(gravity, gravity_timer, dt)
+        gravity, gravity_timer, gravity_direction = environment.updateGravity(gravity, gravity_direction, gravity_timer, dt)
         total_gravity = gravity + curr_force
 
-        gravity_timer_text = gravity_timer_text_font.render("距离下次重力反转还有：" + str(round(gravity_timer, 2)) + " s", True, gravity_timer_text_color)
+        gravity_timer_amount = gravity_timer_text_font.render(str(round(gravity_timer, 1)) + " s", True, gravity_timer_text_color)
 
         # 随机生成Biofilm
-        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer,dt,biofilm_lambda)
+        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer, dt, biofilm_lambda)
         if biofilm_form == 1:
             biofilm_queue.append(classfile.Biofilm(ai_settings, color_check))
             biofilm_form = 0
@@ -342,7 +343,7 @@ def showNewGame(screen, color_check, speed_check):
             if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
                 score += 10
                 if biofilm.film_color == "white":
-                    ball.color = ai_settings.ball_color_order[random.randint(0,len(ai_settings.ball_color_order)-1)]
+                    ball.color = ball_color_order[random.randint(0, num_of_color - 1)]
                     ball.ball_surface.fill(pygame.Color((ball.color)))
                     colli_film_color = "white"
                 else:
@@ -359,35 +360,33 @@ def showNewGame(screen, color_check, speed_check):
         for biofilm in biofilm_queue:
             biofilm.film_pos -= biofilm.film_speed
 
-        # 更新slots
-        flag = (flag + 1) % ai_settings.slot_width
+        # 更新slots和分数
+        flag = (flag + 1) % slot_width
         if flag % 8 == 0:
-            for i in range(num_of_slots):
-                slots[i].top_slot_rect[0] -= 8
-                slots[i].bottom_slot_rect[0] -= 8
+            for slot in slots:
+                slot.top_slot_rect[0] -= 8
+                slot.bottom_slot_rect[0] -= 8
         if flag == 0:
             slots.pop(0)
             last_slot = slots[-1]
             slots.append(classfile.Slot(screen_size, last_slot.level, last_slot.height))
-
-        # 更新分数
-        score += 0.01
-        score_text = score_text_font.render("Score: " + str(int(score)), True, (0, 0, 0))
+            score += 1
+            score_text = score_text_font.render("Score: " + str(score), True, (0, 0, 0))
         
         # 检查死亡：位置+颜色
-        if environment.checkDead(ai_settings, colli_film_color, ball.color, screen_size, ball, slots):
+        if environment.checkDead(colli_film_color, screen_size[0], ball, slots):
             return score
 
         # 刷新屏幕
         game_window.fill((238, 230, 133))
-        for i in range(num_of_slots):
-            temp_slot = slots[i]
-            game_window.blit(temp_slot.top_slot_surface, temp_slot.top_slot_rect)
-            game_window.blit(temp_slot.bottom_slot_surface, temp_slot.bottom_slot_rect)
+        for slot in slots:
+            game_window.blit(slot.top_slot_surface, slot.top_slot_rect)
+            game_window.blit(slot.bottom_slot_surface, slot.bottom_slot_rect)
         game_window.blit(ball.ball_surface, ball.ball_rect)
         for biofilm in biofilm_queue:
-            game_window.blit(biofilm.film_surface, (biofilm.film_pos,0))
+            game_window.blit(biofilm.film_surface, (biofilm.film_pos, 0))
         game_window.blit(gravity_timer_text, (20, 20))
+        game_window.blit(gravity_timer_amount, (235, 20))
         game_window.blit(gravity_indicator, (20, 80))
         game_window.blit(gravity_status[gravity_direction], (150, 60))
         game_window.blit(score_text, (450, 20))
