@@ -174,7 +174,7 @@ def setLevel(screen):
                 sys.exit()
         screen.blit(level_window, (0, 0))
         pygame.display.update()
-    return # 返回难度情况，给showNewGame作为参数传入
+    return color_check, speed_check # 返回难度情况，给showNewGame作为参数传入
 
 def showNewGame(screen, color_check, speed_check):
     screen_size = screen.get_size()
