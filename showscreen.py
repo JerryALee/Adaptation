@@ -110,7 +110,6 @@ def setLevel(screen):
     color_check = 0
     speed_check = 0
     option_font_height = v3color.get_size()[1]
-
     while True:
         buttons = pygame.mouse.get_pressed()
         x1, y1 = pygame.mouse.get_pos()
@@ -326,17 +325,6 @@ def showNewGame(screen, color_check, speed_check):
 
         gravity_timer_amount = gravity_timer_text_font.render(str(round(gravity_timer, 1)) + " s", True, gravity_timer_text_color)
 
-        # 随机生成Biofilm
-        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer, dt, biofilm_lambda)
-        if biofilm_form == 1:
-            biofilm_queue.append(classfile.Biofilm(ai_settings, color_check))
-            biofilm_form = 0
-        # print(biofilm_timer)
-
-        # 删除出屏Biofilm
-        if len(biofilm_queue) > 0 and biofilm_queue[0].film_pos <= 0:
-            biofilm_queue.pop(0)
-
         # 判断ball穿膜
         colli_film_color = "white"
         for biofilm in biofilm_queue:
@@ -369,9 +357,25 @@ def showNewGame(screen, color_check, speed_check):
         if flag == 0:
             slots.pop(0)
             last_slot = slots[-1]
+            # print(last_slot.level, last_slot.height)
             slots.append(classfile.Slot(screen_size, last_slot.level, last_slot.height))
             score += 1
             score_text = score_text_font.render("Score: " + str(score), True, (0, 0, 0))
+
+        # 获取biofilm即将出现时最后一个slot的位置
+        # lower_pos = slots[-1].level
+        # higher_pos = lower_pos + slots[-1].height
+        # print(lower_pos, higher_pos)
+
+        # 随机生成Biofilm
+        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer,dt,biofilm_lambda)
+        if biofilm_form == 1:
+            biofilm_queue.append(classfile.Biofilm(color_check))
+            biofilm_form = 0
+
+        # 删除出屏Biofilm
+        if len(biofilm_queue) > 0 and biofilm_queue[0].film_pos <= 0:
+            biofilm_queue.pop(0)
         
         # 检查死亡：位置+颜色
         if environment.checkDead(colli_film_color, screen_size[0], ball, slots):
@@ -398,15 +402,57 @@ def showNewGame(screen, color_check, speed_check):
     return score
 
 def showScore(screen, score):
-    return # True or False
+
+    screen_size = screen.get_size()
+    score_window = pygame.Surface(screen_size)
+    score_window = score_window.convert()
+    score_window.fill(ai_settings.game_bg_color)
+
+    (score_title, score_text, back, back1, again, again1) = text.getScoreText(score)
+
+    back_size = back.get_size()
+    again_size = again.get_size()
+    back_pos = (612, 640)
+    again_pos = (412-again_size[0],640)
+
+    while True:
+        buttons = pygame.mouse.get_pressed()
+        x1, y1 = pygame.mouse.get_pos()
+        if x1 >= again_pos[0] and x1 <= again_pos[0] + again_size[0] \
+            and y1 >= again_pos[1] and y1 <= again_pos[1] + again_size[1]:
+            score_window.blit(again1, again_pos)
+            if buttons[0]:
+                return True
+        elif x1 >= back_pos[0] and x1 <= back_pos[0] + back_size[0] \
+            and y1 >= back_pos[1] and y1 <= back_pos[1] + back_size[1]:
+            score_window.blit(back1, back_pos)
+            if buttons[0]:
+                return False
+        else:
+            score_window.blit(again,again_pos)
+            score_window.blit(back,back_pos)
+
+        score_window.blit(score_title, (((screen_size[0] - score_title.get_size()[0])/2, 50)))
+        score_window.blit(score_text, (((screen_size[0] - score_text.get_size()[0])/2, 360)))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+        screen.blit(score_window, (0, 0))
+        pygame.display.update()
+
 
 def showGame(screen):
     while True:
         color_check, speed_check = setLevel(screen)
+        game_state = True
         if color_check == 0 or speed_check == 0:
             break
         else:
-            score = showNewGame(screen, color_check, speed_check)
+            while game_state:
+                score = showNewGame(screen, color_check, speed_check)
+                game_state = showScore(screen, score)
+            
         '''
         go_to_welcome = showScore(screen, score)
         if go_to_welcome:
