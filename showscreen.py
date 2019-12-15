@@ -132,13 +132,6 @@ def setLevel(screen):
                 color_surface_list[color_check-1].fill(level_button_color)
             v7color_surface.fill(pygame.Color("red"))
             color_check = 3
-        
-        # if color_check == 1:
-        #     v3color_surface.fill(pygame.Color("red"))
-        # elif color_check == 2:
-        #     v5color_surface.fill(pygame.Color("red"))
-        # elif color_check == 3:
-        #     v7color_surface.fill(pygame.Color("red"))
 
         if buttons[0] and x1 >= quater_pos and x1 <= quater_pos + SpeedLow.get_size()[0] \
             and y1 >= 480 and y1 <= 480 + option_font_height:
@@ -158,13 +151,6 @@ def setLevel(screen):
                 speed_surface_list[speed_check-1].fill(level_button_color)
             SpeedHig_surface.fill(pygame.Color("red"))
             speed_check = 3
-
-        # if speed_check == 1:
-        #     SpeedLow_surface.fill(pygame.Color("red"))
-        # elif speed_check == 2:
-        #     SpeedMid_surface.fill(pygame.Color("red"))
-        # elif speed_check == 3:
-        #     SpeedHig_surface.fill(pygame.Color("red"))
 
         if color_check != 0 and speed_check !=0 and x1 >= click_pos[0] and x1 <= click_pos[0] + click_size[0] \
             and y1 >= click_pos[1] and y1 <= click_pos[1] + click_size[1]:
