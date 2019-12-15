@@ -112,7 +112,6 @@ def setLevel(screen):
     option_font_height = v3color.get_size()[1]
     while True:
         buttons = pygame.mouse.get_pressed()
-        print(buttons)
         x1, y1 = pygame.mouse.get_pos()
         if buttons[0] and x1 >= quater_pos  and x1 <= quater_pos + v3color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
@@ -325,17 +324,6 @@ def showNewGame(screen, color_check, speed_check):
 
         gravity_timer_text = gravity_timer_text_font.render("距离下次重力反转还有：" + str(round(gravity_timer, 2)) + " s", True, gravity_timer_text_color)
 
-        # 随机生成Biofilm
-        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer,dt,biofilm_lambda)
-        if biofilm_form == 1:
-            biofilm_queue.append(classfile.Biofilm(ai_settings, color_check))
-            biofilm_form = 0
-        # print(biofilm_timer)
-
-        # 删除出屏Biofilm
-        if len(biofilm_queue) > 0 and biofilm_queue[0].film_pos <= 0:
-            biofilm_queue.pop(0)
-
         # 判断ball穿膜
         colli_film_color = "white"
         for biofilm in biofilm_queue:
@@ -368,7 +356,23 @@ def showNewGame(screen, color_check, speed_check):
         if flag == 0:
             slots.pop(0)
             last_slot = slots[-1]
+            # print(last_slot.level, last_slot.height)
             slots.append(classfile.Slot(screen_size, last_slot.level, last_slot.height))
+
+        # 获取biofilm即将出现时最后一个slot的位置
+        # lower_pos = slots[-1].level
+        # higher_pos = lower_pos + slots[-1].height
+        # print(lower_pos, higher_pos)
+
+        # 随机生成Biofilm
+        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer,dt,biofilm_lambda)
+        if biofilm_form == 1:
+            biofilm_queue.append(classfile.Biofilm(ai_settings, color_check))
+            biofilm_form = 0
+
+        # 删除出屏Biofilm
+        if len(biofilm_queue) > 0 and biofilm_queue[0].film_pos <= 0:
+            biofilm_queue.pop(0)
 
         # 更新分数
         score += 0.01
