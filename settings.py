@@ -26,8 +26,6 @@ class Settings(object):
         self.ball_speed_limit_hig = 4
 
         # Biofilm settings
-        self.film_size = (4, 1024)
-        self.film_iniPos = 1024
         self.color_order = ["red", "orange", "yellow", "green", "cyan", "blue", "purple", "white"]
         self.film_speed = 1
         self.top_timer_limit = 8

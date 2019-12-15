@@ -7,7 +7,7 @@ ai_settings = settings.Settings()
 def updateGravity(gravity, gravity_direction, timer, dt):
     timer -= dt
     if timer <= 0:
-        timer = 5 + random.expovariate(1/5)
+        timer = random.randint(5, 20)
         gravity = -gravity
         gravity_direction = (gravity_direction + 1) % 2
     '''if gravity > 0:

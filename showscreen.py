@@ -267,7 +267,7 @@ def showNewGame(screen, color_check, speed_check):
     elif speed_check == 3:
         speed_limit = ai_settings.ball_speed_limit_hig 
 
-    ball = classfile.Ball(ai_settings)
+    ball = classfile.Ball()
     biofilm_queue = []
     # biofilm = classfile.Biofilm(ai_settings)
 
@@ -322,13 +322,12 @@ def showNewGame(screen, color_check, speed_check):
         prev_ticks = current_ticks
         gravity, gravity_timer, gravity_direction = environment.updateGravity(gravity, gravity_direction, gravity_timer, dt)
         total_gravity = gravity + curr_force
-
         gravity_timer_amount = gravity_timer_text_font.render(str(round(gravity_timer, 1)) + " s", True, gravity_timer_text_color)
 
         # 判断ball穿膜
         colli_film_color = "white"
         for biofilm in biofilm_queue:
-            if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_pos:
+            if ball.ball_rect[0] + ai_settings.ball_size[0] == biofilm.film_rect[0]:
                 score += 10
                 if biofilm.film_color == "white":
                     ball.color = ball_color_order[random.randint(0, num_of_color - 1)]
@@ -346,7 +345,7 @@ def showNewGame(screen, color_check, speed_check):
         ball.ball_rect[1] += int(ball.speed)
         ball.ball_rect[0] += ball.left + ball.right
         for biofilm in biofilm_queue:
-            biofilm.film_pos -= biofilm.film_speed
+            biofilm.film_rect[0] -= ai_settings.film_speed
 
         # 更新slots和分数
         flag = (flag + 1) % slot_width
@@ -362,19 +361,15 @@ def showNewGame(screen, color_check, speed_check):
             score += 1
             score_text = score_text_font.render("Score: " + str(score), True, (0, 0, 0))
 
-        # 获取biofilm即将出现时最后一个slot的位置
-        # lower_pos = slots[-1].level
-        # higher_pos = lower_pos + slots[-1].height
-        # print(lower_pos, higher_pos)
-
         # 随机生成Biofilm
-        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer,dt,biofilm_lambda)
+        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer, dt, biofilm_lambda)
         if biofilm_form == 1:
-            biofilm_queue.append(classfile.Biofilm(color_check))
+            temp_slot = slots[-1]
+            biofilm_queue.append(classfile.Biofilm(color_check, temp_slot.height, screen_size[1] - temp_slot.level - temp_slot.height))
             biofilm_form = 0
 
         # 删除出屏Biofilm
-        if len(biofilm_queue) > 0 and biofilm_queue[0].film_pos <= 0:
+        if len(biofilm_queue) > 0 and biofilm_queue[0].film_rect[0] <= 0:
             biofilm_queue.pop(0)
         
         # 检查死亡：位置+颜色
@@ -388,7 +383,7 @@ def showNewGame(screen, color_check, speed_check):
             game_window.blit(slot.bottom_slot_surface, slot.bottom_slot_rect)
         game_window.blit(ball.ball_surface, ball.ball_rect)
         for biofilm in biofilm_queue:
-            game_window.blit(biofilm.film_surface, (biofilm.film_pos, 0))
+            game_window.blit(biofilm.film_surface, biofilm.film_rect)
         game_window.blit(gravity_timer_text, (20, 20))
         game_window.blit(gravity_timer_amount, (235, 20))
         game_window.blit(gravity_indicator, (20, 80))
@@ -413,7 +408,7 @@ def showScore(screen, score):
     back_size = back.get_size()
     again_size = again.get_size()
     back_pos = (612, 640)
-    again_pos = (412-again_size[0],640)
+    again_pos = (412 - again_size[0], 640)
 
     while True:
         buttons = pygame.mouse.get_pressed()
@@ -429,8 +424,8 @@ def showScore(screen, score):
             if buttons[0]:
                 return False
         else:
-            score_window.blit(again,again_pos)
-            score_window.blit(back,back_pos)
+            score_window.blit(again, again_pos)
+            score_window.blit(back, back_pos)
 
         score_window.blit(score_title, (((screen_size[0] - score_title.get_size()[0])/2, 50)))
         score_window.blit(score_text, (((screen_size[0] - score_text.get_size()[0])/2, 360)))
