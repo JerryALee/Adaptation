@@ -2,7 +2,9 @@ import pygame
 import random
 import environment
 import settings
+import os
 
+filepath = os.path.dirname(__file__)
 ai_settings = settings.Settings()
 
 class Ball(object):
@@ -11,9 +13,15 @@ class Ball(object):
         self.ball_size = ai_settings.ball_size
         self.ball_pos = ai_settings.ball_iniPos
         self.ball_rect = pygame.Rect(self.ball_pos+self.ball_size)
-        self.ball_surface = pygame.Surface(self.ball_size)
         self.color = ai_settings.ball_iniCol
-        self.ball_surface.fill(pygame.Color(self.color))
+        self.ball_surface_dict = {"red": pygame.image.load(os.path.join(filepath,"images/red.png")).convert_alpha(), \
+            "orange": pygame.image.load(os.path.join(filepath,"images/orange.png")).convert_alpha(), \
+                 "yellow": pygame.image.load(os.path.join(filepath,"images/yellow.png")).convert_alpha(), \
+                     "green": pygame.image.load(os.path.join(filepath,"images/green.png")).convert_alpha(), \
+                         "cyan": pygame.image.load(os.path.join(filepath,"images/cyan.png")).convert_alpha(), \
+                             "blue": pygame.image.load(os.path.join(filepath,"images/blue.png")).convert_alpha(), \
+                                  "purple": pygame.image.load(os.path.join(filepath,"images/red.png")).convert_alpha()}
+        self.ball_surface = self.ball_surface_dict[self.color]
         self.left = ai_settings.ball_left
         self.right = ai_settings.ball_right
         self.speed = ai_settings.ball_speed
@@ -27,8 +35,8 @@ class Slot(object):
         elif self.level >= screen_size[1] - 600:
             self.level = screen_size[1] - 610
         self.height = prev_slot_height + 10 * random.randint(-3, 3)
-        if self.height <= 400:
-            self.height = 410
+        if self.height <= 300:
+            self.height = 310
         elif self.height >= 600:
             self.height = 590
         self.bottom_slot_rect = pygame.Rect(screen_size[0], screen_size[1] - self.level, ai_settings.slot_width, self.level)

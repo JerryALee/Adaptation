@@ -228,7 +228,7 @@ def showNewGame(screen, color_check, speed_check):
         slots[i].bottom_slot_rect[0] = slot_width * i
 
     # 显示难度信息
-    level_option_font = pygame.font.Font(os.path.join(filepath,"fonts/ARLRDBD.ttf"), 18)
+    level_option_font = pygame.font.Font(os.path.join(filepath, "fonts/ARLRDBD.ttf"), 18)
     v3color = level_option_font.render("Three Color", True, (0,0,0))
     v5color = level_option_font.render("Five Color", True, (0,0,0))
     v7color = level_option_font.render("Seven Color", True, (0,0,0))
@@ -299,7 +299,7 @@ def showNewGame(screen, color_check, speed_check):
                 elif event.key == pygame.K_SPACE:
                     current_ball_color = (current_ball_color + 1) % num_of_color
                     ball.color = ball_color_order[current_ball_color]
-                    ball.ball_surface.fill(pygame.Color((ball.color)))
+                    ball.ball_surface = ball.ball_surface_dict[ball.color]
                 elif event.key == pygame.K_j:
                     ball.left = -1
                 elif event.key == pygame.K_l:
@@ -332,7 +332,7 @@ def showNewGame(screen, color_check, speed_check):
                 score += 10
                 if biofilm.film_color == "white":
                     ball.color = ball_color_order[random.randint(0, num_of_color - 1)]
-                    ball.ball_surface.fill(pygame.Color((ball.color)))
+                    ball.ball_surface = ball.ball_surface_dict[ball.color]
                     colli_film_color = "white"
                 else:
                     colli_film_color = biofilm.film_color

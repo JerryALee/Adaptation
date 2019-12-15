@@ -14,7 +14,7 @@ class Settings(object):
         self.level_button_color = (160,160,160)
 
         # ball settings
-        self.ball_size = (40, 40)
+        self.ball_size = (73, 40)
         self.ball_iniPos = (492, 364)
         self.ball_iniCol = "red"
         self.ball_color_order = ["red", "orange", "yellow", "green", "cyan", "blue", "purple"]
