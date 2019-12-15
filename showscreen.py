@@ -142,12 +142,12 @@ def setLevel(screen):
             and y1 >= click_pos[1] and y1 <= click_pos[1] + click_size[1]:
             level_window.blit(click1, click_pos)
             if buttons[0]:
-                showGame(screen, color_check, speed_check)
+                return color_check, speed_check 
         elif x1 >= back_pos[0] and x1 <= back_pos[0] + back_size[0] \
             and y1 >= back_pos[1] and y1 <= back_pos[1] + back_size[1]:
             level_window.blit(back1, back_pos)
             if buttons[0]:
-                break
+                return 0, 0
         else:
             level_window.blit(click,click_pos)
             level_window.blit(back,back_pos)
@@ -174,7 +174,7 @@ def setLevel(screen):
                 sys.exit()
         screen.blit(level_window, (0, 0))
         pygame.display.update()
-    return color_check, speed_check # 返回难度情况，给showNewGame作为参数传入
+    # 返回难度情况，给showNewGame作为参数传入
 
 def showNewGame(screen, color_check, speed_check):
     screen_size = screen.get_size()
@@ -377,8 +377,8 @@ def showNewGame(screen, color_check, speed_check):
         game_window.blit(gravity_indicator, (20, 80))
         game_window.blit(gravity_status[gravity_direction], (150, 60))
         game_window.blit(score_text, (450, 20))
-        game_window.blit(color_choice, (800, 20))
-        game_window.blit(speed_choice, (900, 20))
+        game_window.blit(color_choice, (700, 20))
+        game_window.blit(speed_choice, (850, 20))
         screen.blit(game_window, (0, 0))
         pygame.display.update()
     
@@ -387,9 +387,13 @@ def showNewGame(screen, color_check, speed_check):
 def showScore(screen, score):
     return # True or False
 
-def showGame(screen, color_check, speed_check):
+def showGame(screen):
     while True:
-        score = showNewGame(screen, color_check, speed_check)
+        color_check, speed_check = setLevel(screen)
+        if color_check == 0 or speed_check == 0:
+            break
+        else:
+            score = showNewGame(screen, color_check, speed_check)
         '''
         go_to_welcome = showScore(screen, score)
         if go_to_welcome:
