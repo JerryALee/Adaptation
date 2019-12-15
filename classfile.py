@@ -54,7 +54,6 @@ class Slot(object):
 class Biofilm(object):
     def __init__(self, color_check, height, upper_bound):
         self.film_rect = pygame.Rect(1024, upper_bound, 4, height)
-        print(self.film_rect)
         self.film_surface = pygame.Surface((4, height))
         self.film_color_order = ai_settings.color_order[:(2*color_check + 1)] + ["white"]
         self.film_color = self.film_color_order[random.randint(0, len(self.film_color_order) - 1)]
