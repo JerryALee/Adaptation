@@ -29,8 +29,7 @@ while True:
         and y1 >= 400 and y1 <= 400 + start_font_size[1]:
         start_window.blit(ksyx1, ((screen_size[0] - start_font_size[0])/2, 400))
         if buttons[0]:
-            # showscreen.showGame(screen) # 进入游戏
-            showscreen.setLevel(screen)
+            showscreen.showGame(screen) # 进入游戏
     elif x1 >= (screen_size[0] - start_font_size[0])/2 and x1 <= (screen_size[0] + start_font_size[0])/2 and \
         y1 >= 480 and y1 <= 480 + start_font_size[1]:
         start_window.blit(yxsm1, ((screen_size[0] - start_font_size[0])/2, 480))
