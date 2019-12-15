@@ -92,9 +92,11 @@ def setLevel(screen):
     v3color_surface = pygame.Surface(v3color.get_size())
     v5color_surface = pygame.Surface(v5color.get_size())
     v7color_surface = pygame.Surface(v7color.get_size())
+    color_surface_list = (v3color_surface, v5color_surface, v7color_surface)
     SpeedLow_surface = pygame.Surface(SpeedLow.get_size())
     SpeedMid_surface = pygame.Surface(SpeedMid.get_size())
     SpeedHig_surface = pygame.Surface(SpeedHig.get_size())
+    speed_surface_list = (SpeedLow_surface, SpeedMid_surface, SpeedHig_surface)
 
     level_button_color = ai_settings.level_button_color
     
@@ -112,31 +114,57 @@ def setLevel(screen):
     while True:
         buttons = pygame.mouse.get_pressed()
         x1, y1 = pygame.mouse.get_pos()
-        if color_check == 0 and buttons[0] and x1 >= quater_pos  and x1 <= quater_pos + v3color.get_size()[0] \
+        if buttons[0] and x1 >= quater_pos  and x1 <= quater_pos + v3color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
+            if color_check != 0:
+                color_surface_list[color_check-1].fill(level_button_color)
             v3color_surface.fill(pygame.Color("red"))
             color_check = 1
-        elif color_check == 0 and buttons[0] and x1 >= middle_pos and x1 <= middle_pos + v5color.get_size()[0] \
+        elif buttons[0] and x1 >= middle_pos and x1 <= middle_pos + v5color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
+            if color_check != 0:
+                color_surface_list[color_check-1].fill(level_button_color)
             v5color_surface.fill(pygame.Color("red"))
             color_check = 2
-        elif color_check == 0 and buttons[0] and x1 >= quater3_pos and x1 <= quater3_pos + v7color.get_size()[0] \
+        elif buttons[0] and x1 >= quater3_pos and x1 <= quater3_pos + v7color.get_size()[0] \
             and y1 >= 320 and y1 <= 320 + option_font_height:
+            if color_check != 0:
+                color_surface_list[color_check-1].fill(level_button_color)
             v7color_surface.fill(pygame.Color("red"))
             color_check = 3
+        
+        # if color_check == 1:
+        #     v3color_surface.fill(pygame.Color("red"))
+        # elif color_check == 2:
+        #     v5color_surface.fill(pygame.Color("red"))
+        # elif color_check == 3:
+        #     v7color_surface.fill(pygame.Color("red"))
 
-        if speed_check == 0 and buttons[0] and x1 >= quater_pos and x1 <= quater_pos + SpeedLow.get_size()[0] \
+        if buttons[0] and x1 >= quater_pos and x1 <= quater_pos + SpeedLow.get_size()[0] \
             and y1 >= 480 and y1 <= 480 + option_font_height:
+            if speed_check != 0:
+                speed_surface_list[speed_check-1].fill(level_button_color)
             SpeedLow_surface.fill(pygame.Color("red"))
             speed_check = 1
-        elif speed_check == 0 and buttons[0] and x1 >= middle_pos1 and x1 <= middle_pos1 + SpeedMid.get_size()[0] \
+        elif buttons[0] and x1 >= middle_pos1 and x1 <= middle_pos1 + SpeedMid.get_size()[0] \
             and y1 >= 480 and y1 <= 480 + option_font_height:
+            if speed_check != 0:
+                speed_surface_list[speed_check-1].fill(level_button_color)
             SpeedMid_surface.fill(pygame.Color("red"))
             speed_check = 2
-        elif speed_check == 0 and buttons[0] and x1 >= quater_pos and x1 <= quater3_pos + SpeedHig.get_size()[0] \
+        elif buttons[0] and x1 >= quater_pos and x1 <= quater3_pos + SpeedHig.get_size()[0] \
             and y1 >= 480 and y1 <= 480 + option_font_height:
+            if speed_check != 0:
+                speed_surface_list[speed_check-1].fill(level_button_color)
             SpeedHig_surface.fill(pygame.Color("red"))
             speed_check = 3
+
+        # if speed_check == 1:
+        #     SpeedLow_surface.fill(pygame.Color("red"))
+        # elif speed_check == 2:
+        #     SpeedMid_surface.fill(pygame.Color("red"))
+        # elif speed_check == 3:
+        #     SpeedHig_surface.fill(pygame.Color("red"))
 
         if color_check != 0 and speed_check !=0 and x1 >= click_pos[0] and x1 <= click_pos[0] + click_size[0] \
             and y1 >= click_pos[1] and y1 <= click_pos[1] + click_size[1]:
