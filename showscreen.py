@@ -76,20 +76,25 @@ def setLevel(screen):
     level_window.fill(ai_settings.level_bg_color)
 
     #text
-    (level_title, v3color, v5color, v7color, SpeedLow, SpeedMid, SpeedHig) = text.getLevelText()
+    (level_title, v3color, v5color, v7color, SpeedLow, SpeedMid, SpeedHig, back, back1, click, click1) = text.getLevelText()
     middle_pos = (screen_size[0] - v5color.get_size()[0])/2
     middle_pos1 = (screen_size[0] - SpeedMid.get_size()[0])/2
     quater_pos = (middle_pos - v3color.get_size()[0])/2
-    quater_pos1 = (middle_pos1 - SpeedLow.get_size()[0])/2
+    # quater_pos1 = (middle_pos1 - SpeedLow.get_size()[0])/2
     quater3_pos = (middle_pos + v5color.get_size()[0]) + (screen_size[0] - (middle_pos + v5color.get_size()[0]) - v7color.get_size()[0])/2
-    quater3_pos1 = (middle_pos + SpeedMid.get_size()[0]) + (screen_size[0] - (middle_pos + SpeedMid.get_size()[0]) - SpeedHig.get_size()[0])/2
+    # quater3_pos1 = (middle_pos + SpeedMid.get_size()[0]) + (screen_size[0] - (middle_pos + SpeedMid.get_size()[0]) - SpeedHig.get_size()[0])/2
     
+    back_size = back.get_size()
+    click_size = click.get_size()
+    back_pos = (612, 640)
+    click_pos = (412-click_size[0],640)
+
     v3color_surface = pygame.Surface(v3color.get_size())
     v5color_surface = pygame.Surface(v5color.get_size())
     v7color_surface = pygame.Surface(v7color.get_size())
-    SpeedLow_surface = pygame.Surface(v7color.get_size())
-    SpeedMid_surface = pygame.Surface(v7color.get_size())
-    SpeedHig_surface = pygame.Surface(v7color.get_size())
+    SpeedLow_surface = pygame.Surface(SpeedLow.get_size())
+    SpeedMid_surface = pygame.Surface(SpeedMid.get_size())
+    SpeedHig_surface = pygame.Surface(SpeedHig.get_size())
 
     level_button_color = ai_settings.level_button_color
     
@@ -100,22 +105,68 @@ def setLevel(screen):
     SpeedMid_surface.fill(level_button_color)
     SpeedHig_surface.fill(level_button_color)
 
+    color_check = 0
+    speed_check = 0
+    option_font_height = v3color.get_size()[1]
+
     while True:
+        buttons = pygame.mouse.get_pressed()
+        x1, y1 = pygame.mouse.get_pos()
+        if color_check == 0 and buttons[0] and x1 >= quater_pos  and x1 <= quater_pos + v3color.get_size()[0] \
+            and y1 >= 320 and y1 <= 320 + option_font_height:
+            v3color_surface.fill(pygame.Color("red"))
+            color_check = 1
+        elif color_check == 0 and buttons[0] and x1 >= middle_pos and x1 <= middle_pos + v5color.get_size()[0] \
+            and y1 >= 320 and y1 <= 320 + option_font_height:
+            v5color_surface.fill(pygame.Color("red"))
+            color_check = 2
+        elif color_check == 0 and buttons[0] and x1 >= quater3_pos and x1 <= quater3_pos + v7color.get_size()[0] \
+            and y1 >= 320 and y1 <= 320 + option_font_height:
+            v7color_surface.fill(pygame.Color("red"))
+            color_check = 3
+
+        if speed_check == 0 and buttons[0] and x1 >= quater_pos and x1 <= quater_pos + SpeedLow.get_size()[0] \
+            and y1 >= 480 and y1 <= 480 + option_font_height:
+            SpeedLow_surface.fill(pygame.Color("red"))
+            speed_check = 1
+        elif speed_check == 0 and buttons[0] and x1 >= middle_pos1 and x1 <= middle_pos1 + SpeedMid.get_size()[0] \
+            and y1 >= 480 and y1 <= 480 + option_font_height:
+            SpeedMid_surface.fill(pygame.Color("red"))
+            speed_check = 2
+        elif speed_check == 0 and buttons[0] and x1 >= quater_pos and x1 <= quater3_pos + SpeedHig.get_size()[0] \
+            and y1 >= 480 and y1 <= 480 + option_font_height:
+            SpeedHig_surface.fill(pygame.Color("red"))
+            speed_check = 3
+
+        if color_check != 0 and speed_check !=0 and x1 >= click_pos[0] and x1 <= click_pos[0] + click_size[0] \
+            and y1 >= click_pos[1] and y1 <= click_pos[1] + click_size[1]:
+            level_window.blit(click1, click_pos)
+            if buttons[0]:
+                showGame(screen, color_check, speed_check)
+        elif x1 >= back_pos[0] and x1 <= back_pos[0] + back_size[0] \
+            and y1 >= back_pos[1] and y1 <= back_pos[1] + back_size[1]:
+            level_window.blit(back1, back_pos)
+            if buttons[0]:
+                break
+        else:
+            level_window.blit(click,click_pos)
+            level_window.blit(back,back_pos)
+
         level_window.blit(level_title, (((screen_size[0] - level_title.get_size()[0])/2, 50)))
         
         level_window.blit(v3color_surface, (quater_pos, 320))
         level_window.blit(v5color_surface, (middle_pos, 320))
         level_window.blit(v7color_surface, (quater3_pos, 320))
-        level_window.blit(SpeedLow_surface, (quater_pos1, 480))
+        level_window.blit(SpeedLow_surface, (quater_pos, 480))
         level_window.blit(SpeedMid_surface, (middle_pos1, 480))
-        level_window.blit(SpeedHig_surface, (quater3_pos1, 480))
+        level_window.blit(SpeedHig_surface, (quater3_pos, 480))
         
         level_window.blit(v3color, (quater_pos, 320))
         level_window.blit(v5color, (middle_pos, 320))
         level_window.blit(v7color, (quater3_pos, 320))
-        level_window.blit(SpeedLow, (quater_pos1, 480))
+        level_window.blit(SpeedLow, (quater_pos, 480))
         level_window.blit(SpeedMid, (middle_pos1, 480))
-        level_window.blit(SpeedHig, (quater3_pos1, 480))
+        level_window.blit(SpeedHig, (quater3_pos, 480))
         
 
         for event in pygame.event.get():
@@ -124,7 +175,7 @@ def setLevel(screen):
         screen.blit(level_window, (0, 0))
         pygame.display.update()
 
-def showNewGame(screen):
+def showNewGame(screen, color_check, speed_check):
     screen_size = screen.get_size()
     game_window = pygame.Surface(screen_size)
     game_window = game_window.convert()
@@ -161,6 +212,20 @@ def showNewGame(screen):
         slots[i].top_slot_rect[0] = ai_settings.slot_width * i
         slots[i].bottom_slot_rect[0] = ai_settings.slot_width * i
 
+    # 显示难度信息
+    level_option_font = pygame.font.Font(os.path.join(filepath,"fonts/ARLRDBD.ttf"), 18)
+    v3color = level_option_font.render("Three Color", True, (0,0,0))
+    v5color = level_option_font.render("Five Color", True, (0,0,0))
+    v7color = level_option_font.render("Seven Color", True, (0,0,0))
+    SpeedLow = level_option_font.render("Low Speed", True, (0,0,0))
+    SpeedMid = level_option_font.render("Middle Speed", True, (0,0,0))
+    SpeedHig = level_option_font.render("High Speed", True, (0,0,0))
+    color_levels = (v3color, v5color, v7color)
+    speed_levels = (SpeedLow, SpeedMid, SpeedHig)
+    
+    color_choice = color_levels[color_check-1]
+    speed_choice = speed_levels[speed_check-1]
+
     # 初始化Biofilm
     biofilm_lambda = ai_settings.film_lambda
     biofilm_timer = random.expovariate(biofilm_lambda)
@@ -177,10 +242,15 @@ def showNewGame(screen):
     game_window = game_window.convert()
     game_window.fill((238, 230, 133))
 
-    ball_color_order = ai_settings.ball_color_order
+    ball_color_order = ai_settings.ball_color_order[:(2*color_check+1)]
     num_of_color = len(ball_color_order)
     current_ball_color = 0
-    speed_limit = ai_settings.ball_speed_limit
+    if speed_check == 1:
+        speed_limit = ai_settings.ball_speed_limit_low
+    elif speed_check == 2:
+        speed_limit = ai_settings.ball_speed_limit_mid
+    elif speed_check == 3:
+        speed_limit = ai_settings.ball_speed_limit_hig 
 
     ball = classfile.Ball(ai_settings)
     biofilm_queue = []
@@ -242,7 +312,7 @@ def showNewGame(screen):
         # 随机生成Biofilm
         biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer,dt,biofilm_lambda)
         if biofilm_form == 1:
-            biofilm_queue.append(classfile.Biofilm(ai_settings))
+            biofilm_queue.append(classfile.Biofilm(ai_settings, color_check))
             biofilm_form = 0
         # print(biofilm_timer)
 
@@ -305,6 +375,8 @@ def showNewGame(screen):
         game_window.blit(gravity_indicator, (20, 80))
         game_window.blit(gravity_status[gravity_direction], (150, 60))
         game_window.blit(score_text, (450, 20))
+        game_window.blit(color_choice, (800, 20))
+        game_window.blit(speed_choice, (900, 20))
         screen.blit(game_window, (0, 0))
         pygame.display.update()
     
@@ -313,9 +385,9 @@ def showNewGame(screen):
 def showScore(screen, score):
     return # True or False
 
-def showGame(screen):
+def showGame(screen, color_check, speed_check):
     while True:
-        score = showNewGame(screen)
+        score = showNewGame(screen, color_check, speed_check)
         '''
         go_to_welcome = showScore(screen, score)
         if go_to_welcome:

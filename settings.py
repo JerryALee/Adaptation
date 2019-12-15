@@ -21,7 +21,9 @@ class Settings(object):
         self.ball_left = 0 # 0 or -1
         self.ball_right = 0 # 0 or 1
         self.ball_speed = 0
-        self.ball_speed_limit = 3
+        self.ball_speed_limit_low = 2
+        self.ball_speed_limit_mid = 3
+        self.ball_speed_limit_hig = 4
 
         # Biofilm settings
         self.film_size = (4, 1024)
