@@ -14,7 +14,7 @@ class Settings(object):
         self.level_button_color = (160,160,160)
 
         # ball settings
-        self.ball_size = (40, 40)
+        self.ball_size = (73, 40)
         self.ball_iniPos = (492, 364)
         self.ball_iniCol = "red"
         self.ball_color_order = ["red", "orange", "yellow", "green", "cyan", "blue", "purple"]
@@ -26,8 +26,6 @@ class Settings(object):
         self.ball_speed_limit_hig = 4
 
         # Biofilm settings
-        self.film_size = (4, 1024)
-        self.film_iniPos = 1024
         self.color_order = ["red", "orange", "yellow", "green", "cyan", "blue", "purple", "white"]
         self.film_speed = 1
         self.top_timer_limit = 8
@@ -35,4 +33,4 @@ class Settings(object):
         self.film_lambda = 1/6
 
         # slots settings
-        self.slot_width = 64
+        self.slot_width = 128

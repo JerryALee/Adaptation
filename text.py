@@ -76,7 +76,7 @@ def getLevelText():
 
 def getScoreText(score):
     score_text_font = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 60)
-    score_text = score_text_font.render(str(int(score)), True, (0, 0, 0))
+    score_text = score_text_font.render(str(score), True, (0, 0, 0))
 
     myfont1 = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 50)
     back = myfont1.render('返回', True, (0, 0, 0))

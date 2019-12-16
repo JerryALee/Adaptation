@@ -4,18 +4,19 @@ import settings
 
 ai_settings = settings.Settings()
 
-def updateGravity(gravity, timer, dt):
+def updateGravity(gravity, gravity_direction, timer, dt):
     timer -= dt
     if timer <= 0:
-        timer = 5 + random.expovariate(1/5)
+        timer = random.randint(5, 20)
         gravity = -gravity
-    if gravity > 0:
+        gravity_direction = (gravity_direction + 1) % 2
+    '''if gravity > 0:
         gravity_direction = 1 # 重力向下
     else:
-        gravity_direction = 0 # 重力向上
+        gravity_direction = 0 # 重力向上'''
     return gravity, timer, gravity_direction
 
-def generateBiofilm(timer,dt,film_lambda):
+def generateBiofilm(timer, dt, film_lambda):
     """
     Function to generate a biofilm with random color
     on the right most side of the map. 
@@ -34,17 +35,17 @@ def generateBiofilm(timer,dt,film_lambda):
         biofilm_form = 0
     return biofilm_form, timer
 
-def checkDead(ai_settings, film_color, ball_color, screen_size, ball, slots):
+def checkDead(film_color, screen_width, ball, slots):
     pos_left = ball.ball_rect.left
     pos_right = ball.ball_rect.right
     for i in range(int(pos_left/ai_settings.slot_width), int(pos_right/ai_settings.slot_width) + 1):
         if ball.ball_rect.top <= slots[i].top_slot_rect.bottom or ball.ball_rect.bottom >= slots[i].bottom_slot_rect.top:
             return True
-    if pos_left <= 0 or pos_right >= screen_size[0]:
+    if pos_left <= 0 or pos_right >= screen_width:
         return True
 
     # 判断ball穿膜
-    if film_color != "white" and ball_color != film_color:
+    if film_color != "white" and ball.color != film_color:
         return True
 
     return False
