@@ -29,8 +29,15 @@ class Settings(object):
         self.color_order = ["red", "orange", "yellow", "green", "cyan", "blue", "purple", "white"]
         self.film_speed = 1
         self.top_timer_limit = 8
-        self.bottom_timer_limit = 2
+        self.bottom_timer_limit = 3
         self.film_lambda = 1/6
 
         # slots settings
         self.slot_width = 128
+
+        # Bomb settings
+        self.bomb_up_limit = 11
+        self.bomb_down_limit = 5
+        self.bomb_size = (62, 59)
+        self.bomb_safe_distance = 5
+        self.bomb_speed = 1
