@@ -404,8 +404,8 @@ def showNewGame(screen, color_check, speed_check):
         if len(bomb_queue) > 0 and bomb_queue[0].bomb_rect[0] <= 0:
             bomb_queue.pop(0)
 
-        # 检查死亡：位置+颜色
-        if environment.checkDead(colli_film_color, screen_size[0], ball, slots):
+        # 检查死亡：位置+颜色+炸弹
+        if environment.checkDead(colli_film_color, screen_size[0], ball, slots, bomb_queue):
             return score
 
         # 刷新屏幕
