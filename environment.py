@@ -10,10 +10,6 @@ def updateGravity(gravity, gravity_direction, timer, dt):
         timer = random.randint(5, 20)
         gravity = -gravity
         gravity_direction = (gravity_direction + 1) % 2
-    '''if gravity > 0:
-        gravity_direction = 1 # 重力向下
-    else:
-        gravity_direction = 0 # 重力向上'''
     return gravity, timer, gravity_direction
 
 def generateBiofilm(timer, dt, film_lambda):
