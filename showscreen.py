@@ -114,7 +114,7 @@ def setLevel(screen):
     SpeedHig_surface = pygame.Surface(SpeedHig.get_size())
     speed_surface_list = (SpeedLow_surface, SpeedMid_surface, SpeedHig_surface)
 
-    # gosky_surface
+    gosky_surface = pygame.Surface(gosky.get_size())
 
     level_button_color = ai_settings.level_button_color
     
@@ -124,6 +124,7 @@ def setLevel(screen):
     SpeedLow_surface.fill(level_button_color)
     SpeedMid_surface.fill(level_button_color)
     SpeedHig_surface.fill(level_button_color)
+    gosky_surface.fill(level_button_color)
 
     color_check = 0
     speed_check = 0
