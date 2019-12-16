@@ -92,7 +92,7 @@ def setLevel(screen):
     level_window.fill(ai_settings.level_bg_color)
 
     #text
-    (level_title, v3color, v5color, v7color, SpeedLow, SpeedMid, SpeedHig, back, back1, click, click1) = text.getLevelText()
+    (level_title, v3color, v5color, v7color, SpeedLow, SpeedMid, SpeedHig, gosky, back, back1, click, click1) = text.getLevelText()
     middle_pos = (screen_size[0] - v5color.get_size()[0])/2
     middle_pos1 = (screen_size[0] - SpeedMid.get_size()[0])/2
     quater_pos = (middle_pos - v3color.get_size()[0])/2
@@ -113,6 +113,8 @@ def setLevel(screen):
     SpeedMid_surface = pygame.Surface(SpeedMid.get_size())
     SpeedHig_surface = pygame.Surface(SpeedHig.get_size())
     speed_surface_list = (SpeedLow_surface, SpeedMid_surface, SpeedHig_surface)
+
+    # gosky_surface
 
     level_button_color = ai_settings.level_button_color
     
