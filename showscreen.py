@@ -50,9 +50,25 @@ def showIntro(screen):
 
     back_pos = (850, 650)
     (intro, back, back1) = text.getIntroText()
-    intro_font_size = intro.get_size()
+    # intro is a list, containing all the introduction information exept 'back'.
+    intro_font_size = intro[0].get_size()
     back_font_size = back.get_size()
-    intro_window.blit(intro, ((screen_size[0] - intro_font_size[0])/2, 100))
+    # intro_window.blit(intro, ((screen_size[0] - intro_font_size[0])/2, 100))
+    intro_window.blit(intro[0],((screen_size[0] - intro_font_size[0])/2, 60))
+    intro_window.blit(intro[1],(80, 110))
+    intro_window.blit(intro[2],(80, 150))
+    intro_window.blit(intro[3],(80, 190))
+    intro_window.blit(intro[4],(80, 230))
+    intro_window.blit(intro[5],(80, 270))
+    intro_window.blit(intro[6],(80, 320))
+    intro_window.blit(intro[7],(80, 360))
+    intro_window.blit(intro[8],(80, 400))
+    intro_window.blit(intro[9],(80, 440))
+    intro_window.blit(intro[10],(80, 490))
+    intro_window.blit(intro[11],(80, 530))
+    intro_window.blit(intro[12],(80, 570))
+    intro_window.blit(intro[13],((screen_size[0] - intro_font_size[0])/2, 610))
+
     while True:
         buttons = pygame.mouse.get_pressed()
         x1, y1 = pygame.mouse.get_pos()
@@ -242,15 +258,16 @@ def showNewGame(screen, color_check, speed_check):
     speed_choice = speed_levels[speed_check - 1]
 
     # 初始化Biofilm
-    biofilm_lambda = ai_settings.film_lambda
-    biofilm_timer = random.expovariate(biofilm_lambda)
     biofilm_top_timer_limit = ai_settings.top_timer_limit
     biofilm_bottom_timer_limit = ai_settings.bottom_timer_limit
-    if biofilm_timer < biofilm_bottom_timer_limit:
-        biofilm_timer = biofilm_bottom_timer_limit
-    elif biofilm_timer > biofilm_top_timer_limit:
-        biofilm_timer = biofilm_top_timer_limit
+    biofilm_timer = random.randint(biofilm_bottom_timer_limit, biofilm_top_timer_limit)
     biofilm_form = 0
+
+    # 初始化Bomb: Macrophage
+    bomb_top_timer_limit = ai_settings.bomb_up_limit
+    bomb_bottom_timer_limit = ai_settings.bomb_down_limit
+    bomb_timer = random.randint(bomb_bottom_timer_limit, bomb_top_timer_limit)
+    bomb_form = 0
 
     screen_size = screen.get_size()
     game_window = pygame.Surface(screen_size)
@@ -269,7 +286,7 @@ def showNewGame(screen, color_check, speed_check):
 
     ball = classfile.Ball()
     biofilm_queue = []
-    # biofilm = classfile.Biofilm(ai_settings)
+    bomb_queue = []
 
     # 准备阶段
     go_start = False
@@ -335,7 +352,8 @@ def showNewGame(screen, color_check, speed_check):
                     colli_film_color = "white"
                 else:
                     colli_film_color = biofilm.film_color
-
+        
+        
         # 更新位置
         ball.speed += total_gravity
         if ball.speed >= speed_limit:
@@ -346,6 +364,8 @@ def showNewGame(screen, color_check, speed_check):
         ball.ball_rect[0] += ball.left + ball.right
         for biofilm in biofilm_queue:
             biofilm.film_rect[0] -= ai_settings.film_speed
+        for bomb in bomb_queue:
+            bomb.bomb_rect[0] -= ai_settings.bomb_speed
 
         # 更新slots和分数
         flag = (flag + 1) % slot_width
@@ -361,17 +381,29 @@ def showNewGame(screen, color_check, speed_check):
             score += 1
             score_text = score_text_font.render("Score: " + str(score), True, (0, 0, 0))
 
+        temp_slot = slots[-1]
         # 随机生成Biofilm
-        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer, dt, biofilm_lambda)
+        biofilm_form, biofilm_timer = environment.generateBiofilm(biofilm_timer, dt, biofilm_bottom_timer_limit, biofilm_top_timer_limit)
         if biofilm_form == 1:
-            temp_slot = slots[-1]
             biofilm_queue.append(classfile.Biofilm(color_check, temp_slot.height, screen_size[1] - temp_slot.level - temp_slot.height))
             biofilm_form = 0
 
         # 删除出屏Biofilm
         if len(biofilm_queue) > 0 and biofilm_queue[0].film_rect[0] <= 0:
             biofilm_queue.pop(0)
+    
+        # 出现bomb: macrophage
+        bomb_size = ai_settings.bomb_size
+        bomb_safe_distance = ai_settings.bomb_safe_distance
+        bomb_form, bomb_timer, bomb_pos = environment.generateBomb(bomb_timer, dt, bomb_bottom_timer_limit, bomb_top_timer_limit, temp_slot.height, screen_size[1] - temp_slot.level - temp_slot.height, bomb_size, bomb_safe_distance)
+        if bomb_form == 1 and bomb_pos != (0, 0):
+            bomb_queue.append(classfile.Bomb(bomb_pos))
+            bomb_form = 0
         
+        # 删除出屏bomb
+        if len(bomb_queue) > 0 and bomb_queue[0].bomb_rect[0] <= 0:
+            bomb_queue.pop(0)
+
         # 检查死亡：位置+颜色
         if environment.checkDead(colli_film_color, screen_size[0], ball, slots):
             return score
@@ -384,6 +416,8 @@ def showNewGame(screen, color_check, speed_check):
         game_window.blit(ball.ball_surface, ball.ball_rect)
         for biofilm in biofilm_queue:
             game_window.blit(biofilm.film_surface, biofilm.film_rect)
+        for bomb in bomb_queue:
+            game_window.blit(bomb.bomb_surface, bomb.bomb_rect)
         game_window.blit(gravity_timer_text, (20, 20))
         game_window.blit(gravity_timer_amount, (235, 20))
         game_window.blit(gravity_indicator, (20, 80))

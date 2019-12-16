@@ -42,16 +42,25 @@ def getIntroText():
     back1 = myfont1.render('返回', True, (255, 0, 0))
 
     myfont2 = pygame.font.Font(os.path.join(filepath,"fonts/SIMYOU.ttf"), 30)
-    intro = myfont2.render('这是游戏玩法的介绍……其中要手动换行', True, (0, 0, 0))
-    return (intro, back, back1)
+    intro2 = myfont2.render('适者生存 不适者淘汰', True, (0, 0, 0))
+    # intro2 = myfont2.render(' 这里是 Adaption', True, (0, 0, 0))
+    intro3 = myfont2.render('0.开始游戏：', True, (0, 0, 0))
+    intro4 = myfont2.render('  首先会选择游戏难度：', True, (0, 0, 0))
+    intro5 = myfont2.render('  颜色难度：Three Color、Five Color、Seven Color；', True, (0, 0, 0))
+    intro6 = myfont2.render('  速度难度：Low Speed、Middle Speed；High Speed.', True, (0, 0, 0))
+    intro7 = myfont2.render('  颜色变换和速度都选择后，点击确认后开始游戏   ', True, (0, 0, 0))
+    
+    intro8 = myfont2.render('1.游戏操作：', True, (0, 0, 0))
+    intro9 = myfont2.render('  游戏开始后重力开始作用，请注意重力翻转时间', True, (0, 0, 0))
+    intro10 = myfont2.render('  点击i开始游戏，i是上，k是下，j是左，l是右', True, (0, 0, 0))
+    intro11 = myfont2.render('  点击space键切换颜色，其中颜色依次变换：红橙黄绿青蓝紫', True, (0, 0, 0))
+    intro12 = myfont2.render('2.障碍设置：', True, (0, 0, 0))
+    intro13 = myfont2.render('  重力挑战：重力翻转时间在左上角，物体受重力作用向上向下移动', True, (0, 0, 0))
+    intro14 = myfont2.render('  过膜挑战：物体经过不同颜色的膜时，需切换成相同颜色才能通过 ', True, (0, 0, 0))
+    intro15 = myfont2.render('现在开始挑战吧！ ', True, (0, 0, 0))
 
-def getGameText():
-    myfont1 = pygame.font.Font(os.path.join(filepath,"fonts/FZCHYJW.ttf"), 50)
-    back = myfont1.render('返回', True, (0, 0, 0))
-    back1 = myfont1.render('返回', True, (255, 0, 0))
+    intro = [intro2, intro3, intro4, intro5, intro6, intro7, intro8, intro9, intro10, intro11, intro12, intro13, intro14, intro15]
 
-    myfont2 = pygame.font.Font(os.path.join(filepath,"fonts/SIMYOU.ttf"), 30)
-    intro = myfont2.render('这是游戏玩法的介绍……其中要手动换行', True, (0, 0, 0))
     return (intro, back, back1)
 
 def getLevelText():

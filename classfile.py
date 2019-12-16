@@ -58,4 +58,9 @@ class Biofilm(object):
         self.film_color_order = ai_settings.color_order[:(2*color_check + 1)] + ["white"]
         self.film_color = self.film_color_order[random.randint(0, len(self.film_color_order) - 1)]
         self.film_surface.fill(pygame.Color(self.film_color))
-        
+
+class Bomb(object): 
+    def __init__(self, bomb_pos):
+        self.bomb_surface = pygame.image.load(os.path.join(filepath,"images/macrophage.png")).convert_alpha()
+        self.bomb_size = self.bomb_surface.get_size() #(62, 59)
+        self.bomb_rect = pygame.Rect(bomb_pos + self.bomb_size) 
