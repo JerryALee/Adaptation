@@ -279,7 +279,6 @@ def showNewGame(screen, color_check, speed_check, gosky_check):
     biofilm_form = 0
 
     # 初始化Bomb: Macrophage
-    print(gosky_check)
     if gosky_check == 0:
         bomb_top_timer_limit = ai_settings.bomb_up_limit
         bomb_bottom_timer_limit = ai_settings.bomb_down_limit
