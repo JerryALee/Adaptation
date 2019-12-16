@@ -20,7 +20,7 @@ class Ball(object):
                      "green": pygame.image.load(os.path.join(filepath,"images/green.png")).convert_alpha(), \
                          "cyan": pygame.image.load(os.path.join(filepath,"images/cyan.png")).convert_alpha(), \
                              "blue": pygame.image.load(os.path.join(filepath,"images/blue.png")).convert_alpha(), \
-                                  "purple": pygame.image.load(os.path.join(filepath,"images/red.png")).convert_alpha()}
+                                  "purple": pygame.image.load(os.path.join(filepath,"images/purple.png")).convert_alpha()}
         self.ball_surface = self.ball_surface_dict[self.color]
         self.left = ai_settings.ball_left
         self.right = ai_settings.ball_right
