@@ -128,6 +128,7 @@ def setLevel(screen):
 
     color_check = 0
     speed_check = 0
+    gosky_check = 0
     option_font_height = v3color.get_size()[1]
     while True:
         buttons = pygame.mouse.get_pressed()
@@ -170,16 +171,25 @@ def setLevel(screen):
             SpeedHig_surface.fill(pygame.Color("red"))
             speed_check = 3
 
+        if buttons[0] and x1 >= (screen_size[0] - gosky.get_size()[0])/2 and x1 <= (screen_size[0] + gosky.get_size()[0])/2 \
+            and y1 >= 220 and y1 <= 220 + option_font_height:
+            if gosky_check != 0:
+                gosky_surface.fill(level_button_color)
+                gosky_check = 0
+            else:
+                gosky_surface.fill(pygame.Color("red"))
+                gosky_check = 1
+
         if color_check != 0 and speed_check !=0 and x1 >= click_pos[0] and x1 <= click_pos[0] + click_size[0] \
             and y1 >= click_pos[1] and y1 <= click_pos[1] + click_size[1]:
             level_window.blit(click1, click_pos)
             if buttons[0]:
-                return color_check, speed_check 
+                return color_check, speed_check, gosky_check
         elif x1 >= back_pos[0] and x1 <= back_pos[0] + back_size[0] \
             and y1 >= back_pos[1] and y1 <= back_pos[1] + back_size[1]:
             level_window.blit(back1, back_pos)
             if buttons[0]:
-                return 0, 0
+                return 0, 0, 0
         else:
             level_window.blit(click,click_pos)
             level_window.blit(back,back_pos)
@@ -192,6 +202,7 @@ def setLevel(screen):
         level_window.blit(SpeedLow_surface, (quater_pos, 480))
         level_window.blit(SpeedMid_surface, (middle_pos1, 480))
         level_window.blit(SpeedHig_surface, (quater3_pos, 480))
+        level_window.blit(gosky_surface, ((screen_size[0] - gosky.get_size()[0])/2, 220))
         
         level_window.blit(v3color, (quater_pos, 320))
         level_window.blit(v5color, (middle_pos, 320))
@@ -199,6 +210,7 @@ def setLevel(screen):
         level_window.blit(SpeedLow, (quater_pos, 480))
         level_window.blit(SpeedMid, (middle_pos1, 480))
         level_window.blit(SpeedHig, (quater3_pos, 480))
+        level_window.blit(gosky, ((screen_size[0] - gosky.get_size()[0])/2, 220))
         
 
         for event in pygame.event.get():
@@ -208,7 +220,7 @@ def setLevel(screen):
         pygame.display.update()
     # 返回难度情况，给showNewGame作为参数传入
 
-def showNewGame(screen, color_check, speed_check):
+def showNewGame(screen, color_check, speed_check, gosky_check):
     screen_size = screen.get_size()
     game_window = pygame.Surface(screen_size)
     game_window = game_window.convert()
@@ -267,8 +279,16 @@ def showNewGame(screen, color_check, speed_check):
     biofilm_form = 0
 
     # 初始化Bomb: Macrophage
-    bomb_top_timer_limit = ai_settings.bomb_up_limit
-    bomb_bottom_timer_limit = ai_settings.bomb_down_limit
+    print(gosky_check)
+    if gosky_check == 0:
+        bomb_top_timer_limit = ai_settings.bomb_up_limit
+        bomb_bottom_timer_limit = ai_settings.bomb_down_limit
+    else:
+        bomb_top_timer_limit = ai_settings.bomb_up_limit_gosky
+        bomb_bottom_timer_limit = ai_settings.bomb_down_limit_gosky
+        demon = pygame.image.load(os.path.join(filepath, "images/demon.png")).convert_alpha()
+        demon_rect = pygame.Rect(ai_settings.demon_pos + demon.get_size())
+
     bomb_timer = random.randint(bomb_bottom_timer_limit, bomb_top_timer_limit)
     bomb_form = 0
 
@@ -423,6 +443,8 @@ def showNewGame(screen, color_check, speed_check):
             game_window.blit(biofilm.film_surface, biofilm.film_rect)
         for bomb in bomb_queue:
             game_window.blit(bomb.bomb_surface, bomb.bomb_rect)
+        if gosky_check != 0:
+            game_window.blit(demon, demon_rect)
         game_window.blit(gravity_timer_text, (20, 20))
         game_window.blit(gravity_timer_amount, (235, 20))
         game_window.blit(gravity_indicator, (20, 80))
@@ -478,13 +500,13 @@ def showScore(screen, score):
 
 def showGame(screen):
     while True:
-        color_check, speed_check = setLevel(screen)
+        color_check, speed_check, gosky_check = setLevel(screen)
         game_state = True
         if color_check == 0 or speed_check == 0:
             break
         else:
             while game_state:
-                score = showNewGame(screen, color_check, speed_check)
+                score = showNewGame(screen, color_check, speed_check, gosky_check)
                 game_state = showScore(screen, score)
             
         '''

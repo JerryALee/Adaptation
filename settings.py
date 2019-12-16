@@ -38,6 +38,10 @@ class Settings(object):
         # Bomb settings
         self.bomb_up_limit = 11
         self.bomb_down_limit = 5
+        self.bomb_up_limit_gosky = 3
+        self.bomb_down_limit_gosky = 1
         self.bomb_size = (62, 59)
         self.bomb_safe_distance = 5
         self.bomb_speed = 1
+        # demon settings
+        self.demon_pos = (850, 50)
